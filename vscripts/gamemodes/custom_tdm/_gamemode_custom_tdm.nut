@@ -837,8 +837,9 @@ void function _OnPlayerDiedPROPHUNT(entity victim, entity attacker, var damageIn
 {
 
 	file.deathPlayersCounter++
+	array<entity> playersON = GetPlayerArray_Alive()
 	
-	if(file.deathPlayersCounter == 1)
+	if(file.deathPlayersCounter == 1 && playersON.len() > 2)
 	{
 	foreach (player in GetPlayerArray())
 	{
@@ -1013,8 +1014,11 @@ float endTime = Time() + GetCurrentPlaylistVarFloat("flowstatePROPHUNTLimitTime"
 	array<entity> IMCplayers = GetPlayerArrayOfTeam(TEAM_IMC)
 	array<entity> MILITIAplayers = GetPlayerArrayOfTeam(TEAM_MILITIA)
 	
-ResetAllPlayerStats()
-
+		ResetAllPlayerStats()
+		// GameRules_SetTeamScore(TEAM_IMC, 0)
+		// GameRules_SetTeamScore(TEAM_MILITIA, 0)
+		file.deathPlayersCounter = 0
+		
 foreach(player in GetPlayerArray())
     {
         if(IsValidPlayer(player))
@@ -1028,8 +1032,8 @@ foreach(player in GetPlayerArray())
 			}
 			player.p.playerDamageDealt = 0.0
 
-				player.SetPlayerNetInt("kills", 0) //Reset for kills
-	    		player.SetPlayerNetInt("assists", 0) //Reset for deaths
+				//player.SetPlayerNetInt("kills", 0) //Reset for kills
+	    		//player.SetPlayerNetInt("assists", 0) //Reset for deaths
 						if(player.GetTeam() == TEAM_MILITIA){
 			Message(player, "FIND A SPOT TO HIDE", "You have 30 seconds, attackers coming soon!", 10)} else if (player.GetTeam() == TEAM_IMC){
 			Message(player, "PROPS ARE HIDING", "Teleporting soon!", 10)}
