@@ -159,9 +159,7 @@ if(!FlowState_PROPHUNT()){
 
 	if(GetMapName() == "mp_rr_desertlands_64k_x_64k" || GetMapName() == "mp_rr_desertlands_64k_x_64k_nx" || GetMapName() == "mp_rr_canyonlands_mu1" || GetMapName() == "mp_rr_canyonlands_mu1_night" || GetMapName() == "mp_rr_canyonlands_64k_x_64k")
 	{
-		if(!FlowState_PROPHUNT()){
 		thread CreateShipRoomFallTriggers()
-		}
 	}
 
     if(!FlowState_PROPHUNT()){
@@ -979,19 +977,19 @@ void function ActualPROPHUNTLobby()
 		}catch(e){}
 	}
 	wait 5
-while(true)
-{
-array<entity> playersON = GetPlayerArray_Alive()
-if(playersON.len() == 1 || playersON.len() == 0)
-{
-wait 15
-	foreach(player in GetPlayerArray())
-	{
-Message(player, "Welcome to Apex Prophunt", "We need at least two players to start, be patient.", 10)
-	}	
-} else {
-break }
-}
+// while(true)
+// {
+// array<entity> playersON = GetPlayerArray_Alive()
+// if(playersON.len() == 1 || playersON.len() == 0)
+// {
+// wait 15
+	// foreach(player in GetPlayerArray())
+	// {
+// Message(player, "Welcome to Apex Prophunt", "We need at least two players to start, be patient.", 10)
+	// }	
+// } else {
+// break }
+// }
 	foreach(player in GetPlayerArray())
 	{
 		try {
