@@ -3468,6 +3468,7 @@ bool function ClientCommand_ClientMsg(entity player, array<string> args)
 	currentChatLine++
 	str = ""
 	
+	if(!FlowState_PROPHUNT()){
 	
 	switch(GetGameState())
     {
@@ -3487,7 +3488,19 @@ file.lastTimeChatUsage = Time()
         break
     default:
         break
+    }} else {
+
+if(IsValidPlayer(player))
+        {
+foreach(sPlayer in GetPlayerArray())
+    {
+	Message( sPlayer, "Trollbox", currentChat, 5)
     }
+file.lastTimeChatUsage = Time()
+		}
+
+	}
+
 	return true
 }
 
