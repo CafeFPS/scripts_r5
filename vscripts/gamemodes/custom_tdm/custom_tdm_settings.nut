@@ -39,8 +39,6 @@ global const table SURF_SETTINGS = {
 }
 
 global const table PROPHUNT_SETTINGS = {
-	["sprintspeed"]=5000,
-	["speed"]=5000,
     ["landslowdownduration"] = 0,
     ["jumpheight"]=60,
     ["gravityscale"]=0.80,
@@ -63,9 +61,4 @@ global const table PROPHUNT_SETTINGS = {
     ["impactSpeed"]=380,
     ["slidedecel"]=50,
     ["slidevelocitydecay"]=0.7
-}
-
-global const table PROPHUNT_SETTINGS_PROPS = {
-	["sprintspeed"]=5000,
-	["speed"]=5000
 }

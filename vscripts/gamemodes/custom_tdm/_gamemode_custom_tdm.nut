@@ -785,7 +785,6 @@ void function _OnPlayerConnectedPROPHUNT(entity player)
 				player.SetPlayerNetBool( "pingEnabled", true )
 				player.SetHealth( 100 )
 				player.SetOrigin(<-19459, 2127, 6404>)
-				player.kv["sprintspeed"] = 5000
 				player.SetThirdPersonShoulderModeOn()
 				player.UnforceStand()
 				player.UnfreezeControlsOnServer()
@@ -803,14 +802,12 @@ void function _OnPlayerConnectedPROPHUNT(entity player)
 				player.SetPlayerNetInt( "respawnStatus", eRespawnStatus.NONE )
 				player.SetPlayerNetBool( "pingEnabled", true )
 				player.SetHealth( 100 )
-				player.kv["sprintspeed"] = 5000
 				player.SetOrigin(<-19459, 2127, 6404>)
-		
 				player.SetThirdPersonShoulderModeOn()
 				player.UnforceStand()
 				player.UnfreezeControlsOnServer()
 			break
-		case eGameState.Playing:
+		case eGameState.Playing: //wait round ends, set new player to spectate random attacker player
 			if(IsValidPlayer(player))
 			{
 				try{
@@ -901,8 +898,8 @@ void function _OnPlayerDiedPROPHUNT(entity victim, entity attacker, var damageIn
 			array<entity> teamMILITIAplayersalive = GetPlayerArrayOfTeam_Alive( TEAM_MILITIA )
 			if ( teamMILITIAplayersalive.len() == 0 )
 			{
-				SetGameState(eGameState.MapVoting)
 				file.tdmState = eTDMState.NEXT_ROUND_NOW
+				SetGameState(eGameState.MapVoting)				
 			}
 			} catch (e) {}
 		}
@@ -977,24 +974,23 @@ void function ActualPROPHUNTLobby()
 				player.UnforceStand()
 				player.UnfreezeControlsOnServer()
 				Message(player, "Welcome to Apex Prophunt", "Waiting for players.", 5)
-				//HolsterAndDisableWeapons( player )
 			}
 		}catch(e){}
 	}
 	wait 5
-// while(true)
-// {
-// array<entity> playersON = GetPlayerArray_Alive()
-// if(playersON.len() == 1 || playersON.len() == 0)
-// {
-// wait 15
-	// foreach(player in GetPlayerArray())
-	// {
-// Message(player, "Welcome to Apex Prophunt", "We need at least two players to start, be patient.", 10)
-	// }	
-// } else {
-// break }
-// }
+while(true)
+{
+array<entity> playersON = GetPlayerArray_Alive()
+if(playersON.len() == 1 || playersON.len() == 0)
+{
+wait 15
+	foreach(player in GetPlayerArray())
+	{
+Message(player, "Welcome to Apex Prophunt", "We need at least two players to start, be patient.", 10)
+	}	
+} else {
+break }
+}
 	foreach(player in GetPlayerArray())
 	{
 		try {
@@ -1013,7 +1009,7 @@ void function ActualPROPHUNTGameLoop()
 file.tdmState = eTDMState.IN_PROGRESS
 SetGameState(eGameState.Playing)
 
-float endTime = Time() + 30
+float endTime = Time() + GetCurrentPlaylistVarFloat("flowstatePROPHUNTLimitTime", 300 )
 	array<entity> IMCplayers = GetPlayerArrayOfTeam(TEAM_IMC)
 	array<entity> MILITIAplayers = GetPlayerArrayOfTeam(TEAM_MILITIA)
 	
@@ -1025,11 +1021,6 @@ foreach(player in GetPlayerArray())
         {
 			ClearInvincible(player)
 			if(player.GetTeam() == TEAM_MILITIA){
-			//ItemFlavor playerCharacter = LoadoutSlot_GetItemFlavor( ToEHI( player ), Loadout_CharacterClass() )
-			//asset characterSetFile = CharacterClass_GetSetFile( playerCharacter )
-			//player.SetPlayerSettingsWithMods( characterSetFile, [] )
-			//SetPlayerSettings(player, PROPHUNT_SETTINGS_PROPS)
-			//player.kv["sprintspeed"] = 5000
 			player.SetOrigin(<9746, 5405, -3390>)
 			TakeAllWeapons(player)
 			PROPHUNT_GiveRandomProp(RandomInt(12),player)
@@ -1044,16 +1035,12 @@ foreach(player in GetPlayerArray())
 			Message(player, "PROPS ARE HIDING", "Teleporting soon!", 10)}
 		}
 	}
-wait 10 //TODO FIX THIS
+wait 30
 
 foreach(player in GetPlayerArray())
     {
 if(player.GetTeam() == TEAM_IMC){
 					player.SetOrigin(<9732, 4942, -4167>)
-					// ItemFlavor playerCharacter = LoadoutSlot_GetItemFlavor( ToEHI( player ), Loadout_CharacterClass() )
-					// asset characterSetFile = CharacterClass_GetSetFile( playerCharacter )
-					// player.SetPlayerSettingsWithMods( characterSetFile, [] )
-					//SetPlayerSettings(player, PROPHUNT_SETTINGS)
 					player.SetThirdPersonShoulderModeOff()
 					TakeAllWeapons(player)
 					string sec = GetCurrentPlaylistVarString("flowstatePROPHUNTweapon", "~~none~~")
