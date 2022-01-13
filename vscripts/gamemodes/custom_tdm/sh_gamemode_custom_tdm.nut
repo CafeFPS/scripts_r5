@@ -40,6 +40,7 @@ global function FlowState_ExtrashieldValue
 global function FlowState_Gungame
 global function FlowState_GungameRandomAbilities
 global function FlowState_SURF
+global function FlowState_PROPHUNT
 
 global function Deathmatch_GetIntroCutsceneNumSpawns           
 global function Deathmatch_GetIntroCutsceneSpawnDuration        
@@ -923,6 +924,7 @@ float function FlowState_ExtrashieldValue()                         { return Get
 bool function FlowState_Gungame()                         { return GetCurrentPlaylistVarBool("flowstateGungame", false ) }
 bool function FlowState_GungameRandomAbilities()                         { return GetCurrentPlaylistVarBool("flowstateGUNGAMERandomAbilities", false ) }
 bool function FlowState_SURF()                         { return GetCurrentPlaylistVarBool("flowstateSurf", false ) }
+bool function FlowState_PROPHUNT()                         { return GetCurrentPlaylistVarBool("flowstatePROPHUNT", false ) }
 
 #if SERVER   
 
