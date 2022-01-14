@@ -748,8 +748,8 @@ void function PROPHUNT_GiveRandomProp(int random, entity player)
 			player.SetArmsModelOverride( $"mdl/angel_city/box_small_01.rmdl" )
             break;
 					case 14:
-            player.SetBodyModelOverride( $"mdl/angel_city/ground_pile_trash_02.rmdl" )
-			player.SetArmsModelOverride( $"mdl/angel_city/ground_pile_trash_02.rmdl" )
+            player.SetBodyModelOverride( $"mdl/furniture/office_chair_leather.rmdl" )
+			player.SetArmsModelOverride( $"mdl/furniture/office_chair_leather.rmdl" )
             break;
 					case 15:
             player.SetBodyModelOverride( $"mdl/containers/slumcity_oxygen_tank_red.rmdl" )
@@ -779,7 +779,7 @@ void function PROPHUNT_GiveRandomProp(int random, entity player)
             player.SetBodyModelOverride( $"mdl/garbage/trash_can_metal_02_b.rmdl" )
 			player.SetArmsModelOverride( $"mdl/garbage/trash_can_metal_02_b.rmdl" )
             break;
-							case 21:
+					case 22:
             player.SetBodyModelOverride( $"mdl/garbage/trash_bin_single_wtrash.rmdl" )
 			player.SetArmsModelOverride( $"mdl/garbage/trash_bin_single_wtrash.rmdl" )
             break;
@@ -929,7 +929,7 @@ void function _OnPlayerDiedPROPHUNT(entity victim, entity attacker, var damageIn
 				victim.SetPlayerNetInt( "assists", invscore2 )
 				// WaitForGameState(eGameState.MapVoting)
 					// _HandleRespawnPROPHUNT( victim )
-					wait 1
+				wait 1
 				victim.Hide()
 			} catch (e) {}
 		
@@ -1038,19 +1038,25 @@ void function ActualPROPHUNTLobby()
 	wait 10
 
 if(!GetCurrentPlaylistVarBool("flowstatePROPHUNTDebug", false )){
-while(true)
-{
-array<entity> playersON = GetPlayerArray_Alive()
-if(playersON.len() == 1 || playersON.len() == 0)
-{
-wait 15
-	foreach(player in GetPlayerArray())
+	while(true)
 	{
-Message(player, "APEX PROPHUNT", "Waiting another player to start.", 10)
-	}	
-} else {
-break }
-}
+		array<entity> playersON = GetPlayerArray_Alive()
+		if(playersON.len() == 1 || playersON.len() == 0)
+		{
+			wait 15
+			foreach(player in GetPlayerArray())
+			{
+				Message(player, "APEX PROPHUNT", "Waiting another player to start.", 10)
+			}	
+		} else {
+						foreach(player in GetPlayerArray())
+			{
+			Message(player, "APEX PROPHUNT", "New player connected, starting now.", 3)
+			}
+			wait 3
+			break 
+		}
+	}
 }
 array<entity> IMCplayers = GetPlayerArrayOfTeam(TEAM_IMC)
 array<entity> MILITIAplayers = GetPlayerArrayOfTeam(TEAM_MILITIA)
@@ -1092,7 +1098,7 @@ float endTime = Time() + GetCurrentPlaylistVarFloat("flowstatePROPHUNTLimitTime"
 	array<entity> IMCplayers = GetPlayerArrayOfTeam(TEAM_IMC)
 	array<entity> MILITIAplayers = GetPlayerArrayOfTeam(TEAM_MILITIA)
 
-//this is for debuggin, so I can changelevel and still have enemy
+//this is for debuggin, so I can changelevel and still have enemy(two instances of the game)
 if (IMCplayers.len() == 2 && MILITIAplayers.len() == 0)
 {
 entity playerNewTeam = IMCplayers[0]
@@ -1103,8 +1109,8 @@ entity playerNewTeam = MILITIAplayers[0]
 playerNewTeam.Code_SetTeam( TEAM_IMC )	
 }
 		ResetAllPlayerStats()
-		// GameRules_SetTeamScore(TEAM_IMC, 0)
-		// GameRules_SetTeamScore(TEAM_MILITIA, 0)
+		GameRules_SetTeamScore(TEAM_IMC, 0)
+		GameRules_SetTeamScore(TEAM_MILITIA, 0)
 		file.deathPlayersCounter = 0
 		
 foreach(player in GetPlayerArray())
@@ -1115,7 +1121,7 @@ foreach(player in GetPlayerArray())
 			if(player.GetTeam() == TEAM_MILITIA){
 			player.SetOrigin(<9746, 5405, -3390>)
 			player.SetAngles( <0,90,0> )
-			PROPHUNT_GiveRandomProp(RandomInt(21),player)
+			PROPHUNT_GiveRandomProp(RandomInt(22),player)
 			player.SetThirdPersonShoulderModeOn()
 			player.kv.solid = 6
 			player.kv.CollisionGroup = TRACE_COLLISION_GROUP_PLAYER	
@@ -1150,6 +1156,59 @@ if(player.GetTeam() == TEAM_IMC){
 			}
 	}
 	
+if (FlowState_Timer()){
+while( Time() <= endTime )
+	{
+		if(Time() == endTime-120)
+		{
+			foreach(player in GetPlayerArray())
+			{
+				if(IsValid(player))
+				{
+					array<entity> MILITIAplayersAlive = GetPlayerArrayOfTeam_Alive(TEAM_MILITIA)
+					Message(player,"2 MINUTES REMAINING!", "Props alive: " + MILITIAplayersAlive.len(), 5)
+				}
+			}
+		}
+		if(Time() == endTime-60)
+		{
+			foreach(player in GetPlayerArray())
+			{
+				if(IsValid(player))
+				{
+					array<entity> MILITIAplayersAlive = GetPlayerArrayOfTeam_Alive(TEAM_MILITIA)
+					Message(player,"1 MINUTE REMAINING!", "Props alive: " + MILITIAplayersAlive.len(), 5, "diag_ap_aiNotify_circleMoves60sec")
+				}
+			}
+		}
+		if(Time() == endTime-30)
+		{
+			foreach(player in GetPlayerArray())
+			{
+				if(IsValid(player))
+				{
+					array<entity> MILITIAplayersAlive = GetPlayerArrayOfTeam_Alive(TEAM_MILITIA)
+					Message(player,"30 SECONDS REMAINING!", "Props alive: " + MILITIAplayersAlive.len(), 5, "diag_ap_aiNotify_circleMoves30sec")
+				}
+			}
+		}
+		if(Time() == endTime-10)
+		{
+			foreach(player in GetPlayerArray())
+			{
+				if(IsValid(player))
+				{
+					array<entity> MILITIAplayersAlive = GetPlayerArrayOfTeam_Alive(TEAM_MILITIA)
+					Message(player,"10 SECONDS REMAINING!",  "Props alive: " + MILITIAplayersAlive.len(), 5, "diag_ap_aiNotify_circleMoves10sec")
+				}
+			}
+		}
+		if(file.tdmState == eTDMState.NEXT_ROUND_NOW)
+		{break}
+		wait 0.2
+		WaitFrame()	
+	}
+}else{
 while( Time() <= endTime )
 	{
 		if(file.tdmState == eTDMState.NEXT_ROUND_NOW)
@@ -1157,23 +1216,24 @@ while( Time() <= endTime )
 		wait 0.2
 		WaitFrame()
 	}
+}
 
-array<entity> MILITIAplayersAliveEndGame = GetPlayerArrayOfTeam_Alive(TEAM_MILITIA)	
+array<entity> MILITIAplayersAlive = GetPlayerArrayOfTeam_Alive(TEAM_MILITIA)	
 
-if(MILITIAplayersAliveEndGame.len() > 0){
+if(MILITIAplayersAlive.len() > 0){
 foreach(player in GetPlayerArray())
     {
-		Message(player, "WINNER TEAM", "Props team win! Alive props: " + MILITIAplayersAliveEndGame.len(), 5)
+		Message(player, "PROPS TEAM WIN", "Props alive: " + MILITIAplayersAlive.len(), 5)
 		player.SetThirdPersonShoulderModeOn()		
 	}
 } else {
 foreach(player in GetPlayerArray())
     {
-		Message(player, "WINNER TEAM", "All props are dead. Attackers team win.", 5)
+		Message(player, "ATTACKERS TEAM WIN", "All props are dead. ", 5)
 		player.SetThirdPersonShoulderModeOn()		
 	}	
 }
-wait 7
+wait 5
 foreach(player in GetPlayerArray())
     {
 		Message(player, "SWAPPING TEAMS", "Next round is starting.", 5)
@@ -3460,7 +3520,7 @@ string function helpMessage()
 string function helpMessagePROPHUNT()
 //by michae\l/#1125
 {
-	return "\n\n CONSOLE COMMANDS:\n\n 1. 'kill_self': if you get stuck.\n2. 'scoreboard': displays scoreboard to user. \n3. 'latency': displays ping of all players to user.\n4. 'say [MESSAGE]': send a public message! (" + FlowState_ChatCooldown().tostring() + "s global cooldown) \n5.'spectate': spectate enemies! \n6. 'commands': display this message again."
+	return "\n\n CONSOLE COMMANDS:\n\n 1. 'kill_self': if you get stuck.\n2. 'scoreboard': displays scoreboard to user. \n3. 'latency': displays ping of all players to user.\n4. 'say [MESSAGE]': send a public message! (" + FlowState_ChatCooldown().tostring() + "s global cooldown) \n5. 'commands': display this message again."
 }
 
 bool function ClientCommand_Help(entity player, array<string> args)
