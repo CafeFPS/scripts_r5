@@ -849,7 +849,12 @@ void function _OnPlayerConnectedPROPHUNT(entity player)
 				player.SetPlayerNetInt( "respawnStatus", eRespawnStatus.NONE )
 				player.SetPlayerNetBool( "pingEnabled", true )
 				player.SetHealth( 100 )
-				player.SetOrigin(<-19459, 2127, 6404>)
+								if (GetMapName() == "mp_rr_desertlands_64k_x_64k" || GetMapName() == "mp_rr_desertlands_64k_x_64k_nx")
+					{
+					player.SetOrigin(<-19459, 2127, 6404>)}
+				else if(GetMapName() == "mp_rr_canyonlands_mu1" || GetMapName() == "mp_rr_canyonlands_mu1_night" || GetMapName() == "mp_rr_canyonlands_64k_x_64k")
+					{
+					player.SetOrigin(<-19459, 2127, 18404>)}
 				player.SetThirdPersonShoulderModeOn()
 				player.UnforceStand()
 				player.UnfreezeControlsOnServer()
@@ -884,7 +889,12 @@ void function _OnPlayerConnectedPROPHUNT(entity player)
 				player.SetPlayerNetInt( "respawnStatus", eRespawnStatus.NONE )
 				player.SetPlayerNetBool( "pingEnabled", true )
 				player.SetHealth( 100 )
-				player.SetOrigin(<-19459, 2127, 6404>)
+								if (GetMapName() == "mp_rr_desertlands_64k_x_64k" || GetMapName() == "mp_rr_desertlands_64k_x_64k_nx")
+					{
+					player.SetOrigin(<-19459, 2127, 6404>)}
+				else if(GetMapName() == "mp_rr_canyonlands_mu1" || GetMapName() == "mp_rr_canyonlands_mu1_night" || GetMapName() == "mp_rr_canyonlands_64k_x_64k")
+					{
+					player.SetOrigin(<-19459, 2127, 18404>)}
 				player.SetThirdPersonShoulderModeOn()
 				player.UnforceStand()
 				player.UnfreezeControlsOnServer()
@@ -1025,7 +1035,7 @@ void function _HandleRespawnPROPHUNT(entity player,bool isTPtofightprops = false
 					player.SetOrigin(<-19459, 2127, 6404>)}
 				else if(GetMapName() == "mp_rr_canyonlands_mu1" || GetMapName() == "mp_rr_canyonlands_mu1_night" || GetMapName() == "mp_rr_canyonlands_64k_x_64k")
 					{
-					player.SetOrigin( <-19459, 2127, 18404> )}
+					player.SetOrigin(<-19459, 2127, 18404>)}
 							
 				player.SetThirdPersonShoulderModeOn()
 				TakeAllWeapons(player)
