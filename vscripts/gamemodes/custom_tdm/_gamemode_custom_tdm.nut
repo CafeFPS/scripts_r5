@@ -767,10 +767,15 @@ void function _OnPlayerConnectedPROPHUNT(entity player)
 	player.Code_SetTeam( TEAM_MILITIA )
 	}	
 
-	GrantSpawnImmunity(player,2)
+	if(GetCurrentPlaylistVarBool("flowstatePROPHUNTDebug", false )){
+	player.Code_SetTeam( TEAM_MILITIA )	
+	}
+	
 	switch(GetGameState())
     {
 		case eGameState.WaitingForPlayers:
+					if(IsValidPlayer(player))
+			{
 						if(FlowState_ForceCharacter()){CharSelect(player)}
 				ItemFlavor playerCharacter = LoadoutSlot_GetItemFlavor( ToEHI( player ), Loadout_CharacterClass() )
 				asset characterSetFile = CharacterClass_GetSetFile( playerCharacter )
@@ -786,9 +791,12 @@ void function _OnPlayerConnectedPROPHUNT(entity player)
 				player.SetThirdPersonShoulderModeOn()
 				player.UnforceStand()
 				player.UnfreezeControlsOnServer()
+				MakeInvincible()
+			}
 			break
 		case eGameState.MapVoting:
-		
+					if(IsValidPlayer(player))
+			{
 				if(FlowState_ForceCharacter()){CharSelect(player)}
 				ItemFlavor playerCharacter = LoadoutSlot_GetItemFlavor( ToEHI( player ), Loadout_CharacterClass() )
 				asset characterSetFile = CharacterClass_GetSetFile( playerCharacter )
@@ -804,6 +812,8 @@ void function _OnPlayerConnectedPROPHUNT(entity player)
 				player.SetThirdPersonShoulderModeOn()
 				player.UnforceStand()
 				player.UnfreezeControlsOnServer()
+				MakeInvincible()
+			}
 			break
 		case eGameState.Playing: //wait round ends, set new player to spectate random attacker player
 			if(IsValidPlayer(player))
@@ -815,8 +825,16 @@ void function _OnPlayerConnectedPROPHUNT(entity player)
 				player.SetPlayerSettingsWithMods( characterSetFile, [] )
 				SetPlayerSettings(player, PROPHUNT_SETTINGS)
 				DoRespawnPlayer( player, null )
-				player.FreezeControlsOnServer()
+				Survival_SetInventoryEnabled( player, true )
+				GiveLoadoutRelatedWeapons(player)
+				player.SetPlayerNetInt( "respawnStatus", eRespawnStatus.NONE )
+				player.SetPlayerNetBool( "pingEnabled", true )
+				player.SetHealth( 0 )
+				player.UnfreezeControlsOnServer()
+				player.UnforceStand()
+				player.Code_SetTeam( TEAM_SPECTATOR )
 				player.SetObserverTarget( IMCplayers[0] )
+				player.SetSpecReplayDelay( 2 )
                 player.StartObserverMode( OBS_MODE_IN_EYE )
 				Remote_CallFunction_NonReplay(player, "ServerCallback_KillReplayHud_Activate")
 				}catch(e){}
@@ -852,13 +870,12 @@ void function _OnPlayerDiedPROPHUNT(entity victim, entity attacker, var damageIn
         void functionref() victimHandleFunc = void function() : (victim, attacker, damageInfo) {
 
 			if(!IsValid(victim)) return
-			int reservedTime = 2
-            wait reservedTime
 			try{
-			if(Spectator_GetReplayIsEnabled() && IsValid(victim) && ShouldSetObserverTarget( attacker ))
+			wait 1
+			if(IsValid(victim))
             {
                 victim.SetObserverTarget( attacker )
-                victim.SetSpecReplayDelay( Spectator_GetReplayDelay() )
+				victim.SetSpecReplayDelay( 2 )
                 victim.StartObserverMode( OBS_MODE_IN_EYE )
 				Remote_CallFunction_NonReplay(victim, "ServerCallback_KillReplayHud_Activate")
             }
@@ -866,16 +883,16 @@ void function _OnPlayerDiedPROPHUNT(entity victim, entity attacker, var damageIn
 				int invscore = victim.GetPlayerGameStat( PGS_DEATHS );
 				invscore++;
 				victim.SetPlayerGameStat( PGS_DEATHS, invscore);
-				
 				//Add a death to the victim
                 int invscore2 = victim.GetPlayerNetInt( "assists" )
 				invscore2++;
 				victim.SetPlayerNetInt( "assists", invscore2 )
-				
-				WaitForGameState(eGameState.MapVoting)
-					_HandleRespawnPROPHUNT( victim )
-					ClearInvincible(victim)
+				// WaitForGameState(eGameState.MapVoting)
+					// _HandleRespawnPROPHUNT( victim )
+					wait 1
+				victim.Hide()
 			} catch (e) {}
+		
 		}
 
         // Atacante
@@ -918,6 +935,7 @@ void function _HandleRespawnPROPHUNT(entity player,bool isTPtofightprops = false
 //By Retículo Endoplasmático#5955 (CaféDeColombiaFPS)//
 ///////////////////////////////////////////////////////
 {
+	player.Show()
 	UpdatePlayerCounts()
 	
     if(!IsValid(player)) return
@@ -935,8 +953,9 @@ void function _HandleRespawnPROPHUNT(entity player,bool isTPtofightprops = false
 			{
 			if(FlowState_ForceCharacter()){CharSelect(player)}
 			player.SetOrigin(<-19459, 2127, 6404>)
-			player.SetThirdPersonShoulderModeOn()
 			if(!IsAlive(player)) {DoRespawnPlayer( player, null )}
+			player.SetThirdPersonShoulderModeOn()
+			TakeAllWeapons(player)
 			Survival_SetInventoryEnabled( player, true )
 			GiveLoadoutRelatedWeapons(player)
 			player.SetPlayerNetInt( "respawnStatus", eRespawnStatus.NONE )
@@ -972,33 +991,54 @@ void function ActualPROPHUNTLobby()
 			{
 				player.UnforceStand()
 				player.UnfreezeControlsOnServer()
-				Message(player, "Welcome to Apex Prophunt", "Waiting for players.", 5)
+				Message(player, "APEX PROPHUNT", "Made by Colombia. Game is starting. ", 8)
 			}
 		}catch(e){}
 	}
-	wait 5
-// while(true)
-// {
-// array<entity> playersON = GetPlayerArray_Alive()
-// if(playersON.len() == 1 || playersON.len() == 0)
-// {
-// wait 15
-	// foreach(player in GetPlayerArray())
-	// {
-// Message(player, "Welcome to Apex Prophunt", "We need at least two players to start, be patient.", 10)
-	// }	
-// } else {
-// break }
-// }
+	wait 10
+
+if(!GetCurrentPlaylistVarBool("flowstatePROPHUNTDebug", false )){
+while(true)
+{
+array<entity> playersON = GetPlayerArray_Alive()
+if(playersON.len() == 1 || playersON.len() == 0)
+{
+wait 15
 	foreach(player in GetPlayerArray())
 	{
+Message(player, "APEX PROPHUNT", "Waiting another player to start.", 10)
+	}	
+} else {
+break }
+}
+}
+array<entity> IMCplayers = GetPlayerArrayOfTeam(TEAM_IMC)
+array<entity> MILITIAplayers = GetPlayerArrayOfTeam(TEAM_MILITIA)
+	foreach(player in MILITIAplayers)
+	{
 		try {
-		Message(player, "ATTENTION", "Game is starting. Prop team teleporting soon!", 5)
+		Message(player, "ATTENTION", "You're a prop. Teleporting in 5 seconds!", 5)
+		}catch(e){}
+	}
+		foreach(player in IMCplayers)
+	{
+		try {
+		Message(player, "ATTENTION", "You're an attacker. Teleporting in 20 seconds!", 5)
 		}catch(e){}
 	}
 wait 5
 WaitFrame()
 }
+
+// void function fixAnglesPROPHUNT(entity player)
+// {
+// // Why is this required?
+// while(true)	{
+// player.SetOrigin( player.EyePosition() )
+// player.SetAngles( player.EyePosition() )
+// // wait 0.5
+// }
+// }
 
 void function ActualPROPHUNTGameLoop()
 ///////////////////////////////////////////////////////
@@ -1011,7 +1051,17 @@ SetGameState(eGameState.Playing)
 float endTime = Time() + GetCurrentPlaylistVarFloat("flowstatePROPHUNTLimitTime", 300 )
 	array<entity> IMCplayers = GetPlayerArrayOfTeam(TEAM_IMC)
 	array<entity> MILITIAplayers = GetPlayerArrayOfTeam(TEAM_MILITIA)
-	
+
+//this is for debuggin, so I can changelevel and still have enemy
+if (IMCplayers.len() == 2 && MILITIAplayers.len() == 0)
+{
+entity playerNewTeam = IMCplayers[0]
+playerNewTeam.Code_SetTeam( TEAM_MILITIA )
+} else if (IMCplayers.len() == 0 && MILITIAplayers.len() == 2)
+{
+entity playerNewTeam = MILITIAplayers[0]
+playerNewTeam.Code_SetTeam( TEAM_IMC )	
+}
 		ResetAllPlayerStats()
 		// GameRules_SetTeamScore(TEAM_IMC, 0)
 		// GameRules_SetTeamScore(TEAM_MILITIA, 0)
@@ -1024,15 +1074,19 @@ foreach(player in GetPlayerArray())
 			ClearInvincible(player)
 			if(player.GetTeam() == TEAM_MILITIA){
 			player.SetOrigin(<9746, 5405, -3390>)
-			TakeAllWeapons(player)
+			player.SetAngles( <0,90,0> )
 			PROPHUNT_GiveRandomProp(RandomInt(12),player)
 			player.SetThirdPersonShoulderModeOn()
+			player.kv.solid = 6
+			player.kv.CollisionGroup = TRACE_COLLISION_GROUP_PLAYER	
+			player.AllowMantle()			
+			// thread fixAnglesPROPHUNT(player)
+			TakeAllWeapons(player)
+			player.GiveOffhandWeapon("mp_ability_heal", OFFHAND_TACTICAL)
 			}
 			player.p.playerDamageDealt = 0.0
 
-				//player.SetPlayerNetInt("kills", 0) //Reset for kills
-	    		//player.SetPlayerNetInt("assists", 0) //Reset for deaths
-						if(player.GetTeam() == TEAM_MILITIA){
+			if(player.GetTeam() == TEAM_MILITIA){
 			Message(player, "FIND A SPOT TO HIDE", "You have 30 seconds, attackers coming soon!", 10)} else if (player.GetTeam() == TEAM_IMC){
 			Message(player, "PROPS ARE HIDING", "Teleporting soon!", 10)}
 		}
@@ -1047,8 +1101,10 @@ if(player.GetTeam() == TEAM_IMC){
 					TakeAllWeapons(player)
 					string sec = GetCurrentPlaylistVarString("flowstatePROPHUNTweapon", "~~none~~")
 					player.GiveWeapon( sec, WEAPON_INVENTORY_SLOT_PRIMARY_0, [] )
-					player.GiveWeapon( "mp_weapon_melee_survival", WEAPON_INVENTORY_SLOT_PRIMARY_2, [] )
-					player.GiveOffhandWeapon( "melee_data_knife", OFFHAND_MELEE, [] )
+					
+					//if a player punch a prop, they will crash. This is a workaround. Colombia
+					//player.GiveWeapon( "mp_weapon_melee_survival", WEAPON_INVENTORY_SLOT_PRIMARY_2, [] )
+					//player.GiveOffhandWeapon( "melee_data_knife", OFFHAND_MELEE, [] )
 					DeployAndEnableWeapons(player)
 					WpnPulloutOnRespawn(player)
 			}
@@ -1058,20 +1114,28 @@ while( Time() <= endTime )
 	{
 		if(file.tdmState == eTDMState.NEXT_ROUND_NOW)
 		{break}
+		wait 0.2
 		WaitFrame()
 	}
-	
+
+array<entity> MILITIAplayersAliveEndGame = GetPlayerArrayOfTeam_Alive(TEAM_MILITIA)	
+
+if(MILITIAplayersAliveEndGame.len() > 0){
 foreach(player in GetPlayerArray())
     {
-		//MakeInvincible(player)
-		//player.SetThirdPersonShoulderModeOn()
-		Message(player, "WINNER TEAM", "PLACEHOLDER", 5)
-		}
-wait 5
+		Message(player, "WINNER TEAM", "Props team win! Alive props: " + MILITIAplayersAliveEndGame.len(), 5)
+		player.SetThirdPersonShoulderModeOn()		
+	}
+} else {
 foreach(player in GetPlayerArray())
     {
-		//MakeInvincible(player)
-		//player.SetThirdPersonShoulderModeOn()
+		Message(player, "WINNER TEAM", "All props are dead. Attackers team win.", 5)
+		player.SetThirdPersonShoulderModeOn()		
+	}	
+}
+wait 7
+foreach(player in GetPlayerArray())
+    {
 		Message(player, "SWAPPING TEAMS", "Next round is starting.", 5)
 		}
 wait 5
@@ -1084,12 +1148,27 @@ wait 5
 	} else if(player.GetTeam() == TEAM_MILITIA){
 			player.Code_SetTeam( TEAM_IMC )	
 			_HandleRespawnPROPHUNT(player)
-	} 
+	} else if(player.GetTeam() == TEAM_SPECTATOR){
+		GiveRandomTeamToSpectator(RandomInt(1),player)
+		_HandleRespawnPROPHUNT(player)
+	}
 }
 //file.bubbleBoundary = CreateBubbleBoundary(file.selectedLocation)
 WaitFrame()
 }
 
+void function GiveRandomTeamToSpectator(int random, entity player)
+{
+    switch(random)
+    {
+        case 0:
+            player.Code_SetTeam( TEAM_IMC )
+            break;
+        case 1:
+            player.Code_SetTeam( TEAM_MILITIA )
+            break;
+    }
+}
 
 void function TpPlayerToSpawnPoint(entity player)
 {
