@@ -815,26 +815,29 @@ void function _OnPlayerConnectedPROPHUNT(entity player)
     GivePassive(player, ePassives.PAS_PILOT_BLOOD)
 	array<entity> IMCplayers = GetPlayerArrayOfTeam(TEAM_IMC)
 	array<entity> MILITIAplayers = GetPlayerArrayOfTeam(TEAM_MILITIA)
+	array<entity> playersON = GetPlayerArray_Alive()
 
-	//player has a team assigned already, we need to fix it before spawn
-	if (IMCplayers.len() == 0)
-	{
-	player.Code_SetTeam( TEAM_IMC )
-	}	
-	if (IMCplayers.len() == 1)
-	{
-	player.Code_SetTeam( TEAM_MILITIA )
-	}	
-
-	if(GetCurrentPlaylistVarBool("flowstatePROPHUNTDebug", false )){
-	player.Code_SetTeam( TEAM_MILITIA )	
-	}
 	
 	switch(GetGameState())
     {
 		case eGameState.WaitingForPlayers:
 					if(IsValidPlayer(player))
 			{
+						
+				//player has a team assigned already, we need to fix it before spawn
+				if (IMCplayers.len() == 0)
+				{
+				player.Code_SetTeam( TEAM_IMC )
+				}	
+				if (IMCplayers.len() == 1)
+				{
+				player.Code_SetTeam( TEAM_MILITIA )
+				}	
+
+				if(GetCurrentPlaylistVarBool("flowstatePROPHUNTDebug", false )){
+				player.Code_SetTeam( TEAM_MILITIA )	
+				}			
+			
 						if(FlowState_ForceCharacter()){CharSelect(player)}
 				ItemFlavor playerCharacter = LoadoutSlot_GetItemFlavor( ToEHI( player ), Loadout_CharacterClass() )
 				asset characterSetFile = CharacterClass_GetSetFile( playerCharacter )
@@ -856,6 +859,20 @@ void function _OnPlayerConnectedPROPHUNT(entity player)
 		case eGameState.MapVoting:
 					if(IsValidPlayer(player))
 			{
+								//player has a team assigned already, we need to fix it before spawn
+				if (IMCplayers.len() == 0)
+				{
+				player.Code_SetTeam( TEAM_IMC )
+				}	
+				if (IMCplayers.len() == 1)
+				{
+				player.Code_SetTeam( TEAM_MILITIA )
+				}	
+
+				if(GetCurrentPlaylistVarBool("flowstatePROPHUNTDebug", false )){
+				player.Code_SetTeam( TEAM_MILITIA )	
+				}
+				
 				if(FlowState_ForceCharacter()){CharSelect(player)}
 				ItemFlavor playerCharacter = LoadoutSlot_GetItemFlavor( ToEHI( player ), Loadout_CharacterClass() )
 				asset characterSetFile = CharacterClass_GetSetFile( playerCharacter )
@@ -878,7 +895,8 @@ void function _OnPlayerConnectedPROPHUNT(entity player)
 			if(IsValidPlayer(player))
 			{
 				try{
-					if(FlowState_ForceCharacter()){CharSelect(player)}
+				player.Code_SetTeam( 20 )
+				if(FlowState_ForceCharacter()){CharSelect(player)}
 				ItemFlavor playerCharacter = LoadoutSlot_GetItemFlavor( ToEHI( player ), Loadout_CharacterClass() )
 				asset characterSetFile = CharacterClass_GetSetFile( playerCharacter )
 				player.SetPlayerSettingsWithMods( characterSetFile, [] )
@@ -889,13 +907,15 @@ void function _OnPlayerConnectedPROPHUNT(entity player)
 				player.SetPlayerNetInt( "respawnStatus", eRespawnStatus.NONE )
 				player.SetPlayerNetBool( "pingEnabled", true )
 				player.SetHealth( 0 )
-				player.UnfreezeControlsOnServer()
+				Message(player, "APEX PROPHUNT", "Game is in progress. \n You'll spawn in the next round. \n ", 10)
+				player.SetThirdPersonShoulderModeOn()
 				player.UnforceStand()
-				player.Code_SetTeam( TEAM_SPECTATOR )
-				player.SetObserverTarget( IMCplayers[0] )
+				player.UnfreezeControlsOnServer()
+				player.SetObserverTarget( playersON[RandomInt(playersON.len())] )
 				player.SetSpecReplayDelay( 2 )
                 player.StartObserverMode( OBS_MODE_IN_EYE )
 				Remote_CallFunction_NonReplay(player, "ServerCallback_KillReplayHud_Activate")
+				MakeInvincible(player)
 				}catch(e){}
 			}
 			break
@@ -903,7 +923,6 @@ void function _OnPlayerConnectedPROPHUNT(entity player)
 			break
 	}
 }
-
 
 void function _OnPlayerDiedPROPHUNT(entity victim, entity attacker, var damageInfo)
 ///////////////////////////////////////////////////////
@@ -994,7 +1013,7 @@ void function _HandleRespawnPROPHUNT(entity player,bool isTPtofightprops = false
 //By Retículo Endoplasmático#5955 (CaféDeColombiaFPS)//
 ///////////////////////////////////////////////////////
 {
-	player.Show()
+	
 	UpdatePlayerCounts()
 	
     if(!IsValid(player)) return
@@ -1023,7 +1042,7 @@ void function _HandleRespawnPROPHUNT(entity player,bool isTPtofightprops = false
 			TakeAllWeapons(player)
 			}
 	}
-
+	player.Show()
 	} catch (e) {}
 	
 }
@@ -1291,7 +1310,7 @@ UpdatePlayerCounts()
 	} else if(player.GetTeam() == TEAM_MILITIA){
 			player.Code_SetTeam( TEAM_IMC )	
 			_HandleRespawnPROPHUNT(player)
-	} else if(player.GetTeam() == TEAM_SPECTATOR){
+	} else if(player.GetTeam() == 20){
 		GiveTeamToSpectator(player) //give team to player connected midgame
 		_HandleRespawnPROPHUNT(player)
 	}
