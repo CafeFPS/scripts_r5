@@ -1239,6 +1239,7 @@ foreach(player in GetPlayerArray())
 		Message(player, "SWAPPING TEAMS", "Next round is starting.", 5)
 		}
 wait 5
+UpdatePlayerCounts()
 			foreach(player in GetPlayerArray())
     {
 	if(player.GetTeam() == TEAM_IMC){
@@ -1249,7 +1250,7 @@ wait 5
 			player.Code_SetTeam( TEAM_IMC )	
 			_HandleRespawnPROPHUNT(player)
 	} else if(player.GetTeam() == TEAM_SPECTATOR){
-		GiveRandomTeamToSpectator(RandomInt(1),player)
+		GiveTeamToSpectator(player) //give team to player connected midgame
 		_HandleRespawnPROPHUNT(player)
 	}
 }
@@ -1257,17 +1258,29 @@ wait 5
 WaitFrame()
 }
 
-void function GiveRandomTeamToSpectator(int random, entity player)
+void function GiveTeamToSpectator(entity player)
 {
-    switch(random)
-    {
-        case 0:
-            player.Code_SetTeam( TEAM_IMC )
-            break;
-        case 1:
-            player.Code_SetTeam( TEAM_MILITIA )
-            break;
-    }
+	array<entity> IMCplayers = GetPlayerArrayOfTeam(TEAM_IMC)
+	array<entity> MILITIAplayers = GetPlayerArrayOfTeam(TEAM_MILITIA)
+
+	if(IMCplayers.len() > MILITIAplayers.len())
+	{
+	player.Code_SetTeam( TEAM_MILITIA )
+	} else if (MILITIAplayers.len() > IMCplayers.len())
+	{
+	player.Code_SetTeam( TEAM_IMC )	
+	} else if (IMCplayers.len() == MILITIAplayers.len())
+	{
+		switch(RandomInt(1))
+		{
+			case 0:
+				player.Code_SetTeam( TEAM_IMC )
+				break;
+			case 1:
+				player.Code_SetTeam( TEAM_MILITIA )
+				break;
+		}
+	}
 }
 
 void function TpPlayerToSpawnPoint(entity player)
