@@ -1016,17 +1016,25 @@ void function _HandleRespawnPROPHUNT(entity player,bool isTPtofightprops = false
 	{
 			if(IsValid( player ))
 			{
-			if(FlowState_ForceCharacter()){CharSelect(player)}
-			player.SetOrigin(<-19459, 2127, 6404>)
-			if(!IsAlive(player)) {DoRespawnPlayer( player, null )}
-			player.SetThirdPersonShoulderModeOn()
-			TakeAllWeapons(player)
-			Survival_SetInventoryEnabled( player, true )
-			GiveLoadoutRelatedWeapons(player)
-			player.SetPlayerNetInt( "respawnStatus", eRespawnStatus.NONE )
-			player.SetPlayerNetBool( "pingEnabled", true )
-			player.SetHealth( 100 )
-			TakeAllWeapons(player)
+				
+				if(FlowState_ForceCharacter()){CharSelect(player)}
+				if(!IsAlive(player)) {DoRespawnPlayer( player, null )}
+				
+				if (GetMapName() == "mp_rr_desertlands_64k_x_64k" || GetMapName() == "mp_rr_desertlands_64k_x_64k_nx")
+					{
+					player.SetOrigin(<-19459, 2127, 6404>)}
+				else if(GetMapName() == "mp_rr_canyonlands_mu1" || GetMapName() == "mp_rr_canyonlands_mu1_night" || GetMapName() == "mp_rr_canyonlands_64k_x_64k")
+					{
+					player.SetOrigin( <-19459, 2127, 18404> )}
+							
+				player.SetThirdPersonShoulderModeOn()
+				TakeAllWeapons(player)
+				Survival_SetInventoryEnabled( player, true )
+				GiveLoadoutRelatedWeapons(player)
+				player.SetPlayerNetInt( "respawnStatus", eRespawnStatus.NONE )
+				player.SetPlayerNetBool( "pingEnabled", true )
+				player.SetHealth( 100 )
+				TakeAllWeapons(player)
 			}
 	}
 	player.Show()
