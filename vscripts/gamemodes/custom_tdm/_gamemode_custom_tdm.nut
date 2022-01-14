@@ -700,8 +700,8 @@ void function PROPHUNT_GiveRandomProp(int random, entity player)
 			player.SetArmsModelOverride( $"mdl/barriers/concrete/concrete_barrier_01.rmdl" )
             break;
 					case 2:
-            player.SetBodyModelOverride( $"mdl/IMC_base/cargo_container_imc_01_blue.rmdl" )
-			player.SetArmsModelOverride( $"mdl/IMC_base/cargo_container_imc_01_blue.rmdl" )
+            player.SetBodyModelOverride( $"mdl/furniture/office_chair_leather.rmdl" )
+			player.SetArmsModelOverride( $"mdl/furniture/office_chair_leather.rmdl" )
             break;
 					case 3:
             player.SetBodyModelOverride( $"mdl/vehicles_r5/land/msc_truck_samson_v2/veh_land_msc_truck_samson_v2.rmdl" )
@@ -712,28 +712,28 @@ void function PROPHUNT_GiveRandomProp(int random, entity player)
 			player.SetArmsModelOverride( $"mdl/industrial/traffic_barrel_02.rmdl" )
             break;
 					case 5:
-            player.SetBodyModelOverride( $"mdl/containers/container_medium_tanks_blue.rmdl" )
-			player.SetArmsModelOverride( $"mdl/containers/container_medium_tanks_blue.rmdl" )
+            player.SetBodyModelOverride( $"mdl/furniture/office_desk_shelved.rmdl" )
+			player.SetArmsModelOverride( $"mdl/furniture/office_desk_shelved.rmdl" )
             break;
 					case 6:
             player.SetBodyModelOverride( $"mdl/angel_city/vending_machine.rmdl" )
 			player.SetArmsModelOverride( $"mdl/angel_city/vending_machine.rmdl" )
             break;
 					case 7:
-            player.SetBodyModelOverride( $"mdl/desertlands/industrial_cargo_container_320_01.rmdl" )
-			player.SetArmsModelOverride( $"mdl/desertlands/industrial_cargo_container_320_01.rmdl" )
+            player.SetBodyModelOverride( $"mdl/utilities/power_gen1.rmdl" )
+			player.SetArmsModelOverride( $"mdl/utilities/power_gen1.rmdl" )
             break;
 					case 8:
-            player.SetBodyModelOverride( $"mdl/desertlands/industrial_cargo_container_small_03.rmdl" )
-			player.SetArmsModelOverride( $"mdl/desertlands/industrial_cargo_container_small_03.rmdl" )
+            player.SetBodyModelOverride( $"mdl/angel_city/box_small_02.rmdl" )
+			player.SetArmsModelOverride( $"mdl/angel_city/box_small_02.rmdl" )
             break;
 					case 9:
-            player.SetBodyModelOverride( $"mdl/vehicles_r5/land/msc_truck_mod_lrg/veh_land_msc_truck_mod_police_lrg_01_closed_static.rmdl" )
-			player.SetArmsModelOverride( $"mdl/vehicles_r5/land/msc_truck_mod_lrg/veh_land_msc_truck_mod_police_lrg_01_closed_static.rmdl" )
+            player.SetBodyModelOverride( $"mdl/colony/antenna_05_colony.rmdl" )
+			player.SetArmsModelOverride( $"mdl/colony/antenna_05_colony.rmdl" )
             break;
 					case 10:
-            player.SetBodyModelOverride( $"mdl/industrial/construction_materials_cart_03.rmdl" )
-			player.SetArmsModelOverride( $"mdl/industrial/construction_materials_cart_03.rmdl" )
+            player.SetBodyModelOverride( $"mdl/furniture/office_laptop.rmdl" )
+			player.SetArmsModelOverride( $"mdl/furniture/office_laptop.rmdl" )
             break;
 					case 11:
             player.SetBodyModelOverride( $"mdl/garbage/garbage_bag_plastic_a.rmdl" )
@@ -742,6 +742,46 @@ void function PROPHUNT_GiveRandomProp(int random, entity player)
 					case 12:
             player.SetBodyModelOverride( $"mdl/vehicles_r5/land/msc_suv_partum/veh_land_msc_suv_partum_static.rmdl" )
 			player.SetArmsModelOverride( $"mdl/vehicles_r5/land/msc_suv_partum/veh_land_msc_suv_partum_static.rmdl" )
+            break;
+					case 13:
+            player.SetBodyModelOverride( $"mdl/angel_city/box_small_01.rmdl" )
+			player.SetArmsModelOverride( $"mdl/angel_city/box_small_01.rmdl" )
+            break;
+					case 14:
+            player.SetBodyModelOverride( $"mdl/angel_city/ground_pile_trash_02.rmdl" )
+			player.SetArmsModelOverride( $"mdl/angel_city/ground_pile_trash_02.rmdl" )
+            break;
+					case 15:
+            player.SetBodyModelOverride( $"mdl/containers/slumcity_oxygen_tank_red.rmdl" )
+			player.SetArmsModelOverride( $"mdl/containers/slumcity_oxygen_tank_red.rmdl" )
+            break;
+					case 16:
+            player.SetBodyModelOverride( $"mdl/containers/box_shrinkwrapped.rmdl" )
+			player.SetArmsModelOverride( $"mdl/containers/box_shrinkwrapped.rmdl" )
+            break;
+					case 17:
+            player.SetBodyModelOverride( $"mdl/furniture/office_chair_leather.rmdl" )
+			player.SetArmsModelOverride( $"mdl/furniture/office_chair_leather.rmdl" )
+            break;
+					case 18:
+            player.SetBodyModelOverride( $"mdl/furniture/chair_beanbag_01.rmdl" )
+			player.SetArmsModelOverride( $"mdl/furniture/chair_beanbag_01.rmdl" )
+            break;
+					case 19:
+            player.SetBodyModelOverride( $"mdl/colony/farmland_crate_plastic_01_red.rmdl" )
+			player.SetArmsModelOverride( $"mdl/colony/farmland_crate_plastic_01_red.rmdl" )
+            break;
+					case 20:
+            player.SetBodyModelOverride( $"mdl/IMC_base/generator_IMC_01.rmdl" )
+			player.SetArmsModelOverride( $"mdl/IMC_base/generator_IMC_01.rmdl" )
+            break;
+					case 21:
+            player.SetBodyModelOverride( $"mdl/garbage/trash_can_metal_02_b.rmdl" )
+			player.SetArmsModelOverride( $"mdl/garbage/trash_can_metal_02_b.rmdl" )
+            break;
+							case 21:
+            player.SetBodyModelOverride( $"mdl/garbage/trash_bin_single_wtrash.rmdl" )
+			player.SetArmsModelOverride( $"mdl/garbage/trash_bin_single_wtrash.rmdl" )
             break;
     }
 }
@@ -791,7 +831,7 @@ void function _OnPlayerConnectedPROPHUNT(entity player)
 				player.SetThirdPersonShoulderModeOn()
 				player.UnforceStand()
 				player.UnfreezeControlsOnServer()
-				MakeInvincible()
+				MakeInvincible(player)
 			}
 			break
 		case eGameState.MapVoting:
@@ -812,7 +852,7 @@ void function _OnPlayerConnectedPROPHUNT(entity player)
 				player.SetThirdPersonShoulderModeOn()
 				player.UnforceStand()
 				player.UnfreezeControlsOnServer()
-				MakeInvincible()
+				MakeInvincible(player)
 			}
 			break
 		case eGameState.Playing: //wait round ends, set new player to spectate random attacker player
@@ -1075,7 +1115,7 @@ foreach(player in GetPlayerArray())
 			if(player.GetTeam() == TEAM_MILITIA){
 			player.SetOrigin(<9746, 5405, -3390>)
 			player.SetAngles( <0,90,0> )
-			PROPHUNT_GiveRandomProp(RandomInt(12),player)
+			PROPHUNT_GiveRandomProp(RandomInt(21),player)
 			player.SetThirdPersonShoulderModeOn()
 			player.kv.solid = 6
 			player.kv.CollisionGroup = TRACE_COLLISION_GROUP_PLAYER	
