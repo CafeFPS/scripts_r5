@@ -894,9 +894,10 @@ void function _OnPlayerConnectedPROPHUNT(entity player)
 		case eGameState.Playing: //wait round ends, set new player to spectate random attacker player
 			if(IsValidPlayer(player))
 			{
+				array<LocPair> prophuntSpawns = prophunt.selectedLocation.spawns
+
 				try{
-				player.Code_SetTeam( 20 )
-				if(FlowState_ForceCharacter()){CharSelect(player)}
+					if(FlowState_ForceCharacter()){CharSelect(player)}
 				ItemFlavor playerCharacter = LoadoutSlot_GetItemFlavor( ToEHI( player ), Loadout_CharacterClass() )
 				asset characterSetFile = CharacterClass_GetSetFile( playerCharacter )
 				player.SetPlayerSettingsWithMods( characterSetFile, [] )
@@ -906,16 +907,15 @@ void function _OnPlayerConnectedPROPHUNT(entity player)
 				GiveLoadoutRelatedWeapons(player)
 				player.SetPlayerNetInt( "respawnStatus", eRespawnStatus.NONE )
 				player.SetPlayerNetBool( "pingEnabled", true )
-				player.SetHealth( 0 )
-				Message(player, "APEX PROPHUNT", "Game is in progress. \n You'll spawn in the next round. \n ", 10)
-				player.SetThirdPersonShoulderModeOn()
-				player.UnforceStand()
-				player.UnfreezeControlsOnServer()
+				player.SetHealth( 100 )
+				player.SetOrigin(prophuntSpawns[RandomInt(4)].origin)
+				player.Hide()
+				Message(player, "APEX PROPHUNT", "Game is in progress. You'll spawn in the next round. \n ", 10)
+				player.Code_SetTeam( 20 )
 				player.SetObserverTarget( playersON[RandomInt(playersON.len())] )
 				player.SetSpecReplayDelay( 2 )
                 player.StartObserverMode( OBS_MODE_IN_EYE )
 				Remote_CallFunction_NonReplay(player, "ServerCallback_KillReplayHud_Activate")
-				MakeInvincible(player)
 				}catch(e){}
 			}
 			break
@@ -997,11 +997,8 @@ void function _OnPlayerDiedPROPHUNT(entity victim, entity attacker, var damageIn
 			}
 			} catch (e) {}
 		}
-		thread victimHandleFunc()
-        thread attackerHandleFunc()
-        foreach(player in GetPlayerArray()){
-		try {Remote_CallFunction_NonReplay(player, "ServerCallback_TDM_PlayerKilled")}
-    catch(exception){;}}
+thread victimHandleFunc()
+thread attackerHandleFunc()
         break
     default:
 		break
@@ -1013,16 +1010,6 @@ void function _HandleRespawnPROPHUNT(entity player,bool isTPtofightprops = false
 //By Retículo Endoplasmático#5955 (CaféDeColombiaFPS)//
 ///////////////////////////////////////////////////////
 {
-	
-	UpdatePlayerCounts()
-	
-    if(!IsValid(player)) return
-	
-	if( player.IsObserver())
-    {
-		player.StopObserverMode()
-        Remote_CallFunction_NonReplay(player, "ServerCallback_KillReplayHud_Deactivate")
-    }
 	try {
 	
 	if(player.GetTeam() == TEAM_IMC || player.GetTeam() == TEAM_MILITIA)
@@ -1278,9 +1265,7 @@ while( Time() <= endTime )
 		WaitFrame()
 	}
 }
-
 array<entity> MILITIAplayersAlive = GetPlayerArrayOfTeam_Alive(TEAM_MILITIA)	
-
 if(MILITIAplayersAlive.len() > 0){
 foreach(player in GetPlayerArray())
     {
@@ -1301,19 +1286,25 @@ foreach(player in GetPlayerArray())
 		}
 wait 5
 UpdatePlayerCounts()
-			foreach(player in GetPlayerArray())
-    {
-	if(player.GetTeam() == TEAM_IMC){
-			TakeAllWeapons(player)
+foreach(player in GetPlayerArray())
+    {		
+		if(player.GetTeam() == TEAM_IMC){
+				TakeAllWeapons(player)
+				player.Code_SetTeam( TEAM_MILITIA )
+				_HandleRespawnPROPHUNT(player)
+		} else if(player.GetTeam() == TEAM_MILITIA){
+				player.Code_SetTeam( TEAM_IMC )	
+				_HandleRespawnPROPHUNT(player)
+		} else {
+			player.StopObserverMode()
+			Remote_CallFunction_NonReplay(player, "ServerCallback_KillReplayHud_Deactivate")
+			player.UnforceStand()
+			player.UnfreezeControlsOnServer()
+			DoRespawnPlayer(player,null)
+			GiveTeamToSpectator(player) //give team to player connected midgame		
 			player.Code_SetTeam( TEAM_MILITIA )
 			_HandleRespawnPROPHUNT(player)
-	} else if(player.GetTeam() == TEAM_MILITIA){
-			player.Code_SetTeam( TEAM_IMC )	
-			_HandleRespawnPROPHUNT(player)
-	} else if(player.GetTeam() == 20){
-		GiveTeamToSpectator(player) //give team to player connected midgame
-		_HandleRespawnPROPHUNT(player)
-	}
+		}
 }
 //file.bubbleBoundary = CreateBubbleBoundary(file.selectedLocation)
 WaitFrame()
