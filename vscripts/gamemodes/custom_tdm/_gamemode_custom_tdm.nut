@@ -11,6 +11,7 @@
 
 global function _CustomTDM_Init
 global function _RegisterLocation
+global function _RegisterLocationPROPHUNT
 global function CreateAnimatedLegend
 global function Message
 string WHITE_SHIELD = "armor_pickup_lv1"
@@ -87,10 +88,15 @@ struct PlayerInfo
 	int lastLatency
 }
 
-//this will be modified every round start
+
 struct{
 float endTime = 0
+array<LocationSettings> locationSettings
+LocationSettings& selectedLocation
+int nextMapIndex = 0
+bool mapIndexChanged = true
 } prophunt
+
 // ██████   █████  ███████ ███████     ███████ ██    ██ ███    ██  ██████ ████████ ██  ██████  ███    ██ ███████
 // ██   ██ ██   ██ ██      ██          ██      ██    ██ ████   ██ ██         ██    ██ ██    ██ ████   ██ ██
 // ██████  ███████ ███████ █████       █████   ██    ██ ██ ██  ██ ██         ██    ██ ██    ██ ██ ██  ██ ███████
@@ -173,6 +179,11 @@ void function _RegisterLocation(LocationSettings locationSettings)
 {
     file.locationSettings.append(locationSettings)
     file.droplocationSettings.append(locationSettings)
+}
+
+void function _RegisterLocationPROPHUNT(LocationSettings locationSettings)
+{
+    prophunt.locationSettings.append(locationSettings)
 }
 
 LocPair function _GetVotingLocation()
@@ -689,8 +700,12 @@ void function _HandleRespawn(entity player)
 
 void function PROPHUNT_GiveRandomProp(int random, entity player)
 {
-    switch(random)
+    if (GetMapName() == "mp_rr_desertlands_64k_x_64k" || GetMapName() == "mp_rr_desertlands_64k_x_64k_nx")
+	{
+		
+	switch(random)
     {
+		
 					case 0:
             player.SetBodyModelOverride( $"mdl/industrial/traffic_cone_01.rmdl" )
 			player.SetArmsModelOverride( $"mdl/industrial/traffic_cone_01.rmdl" )
@@ -784,6 +799,8 @@ void function PROPHUNT_GiveRandomProp(int random, entity player)
 			player.SetArmsModelOverride( $"mdl/garbage/trash_bin_single_wtrash.rmdl" )
             break;
     }
+	
+	}
 }
 
 void function _OnPlayerConnectedPROPHUNT(entity player)
@@ -1024,6 +1041,18 @@ void function RunPROPHUNT()
 void function ActualPROPHUNTLobby()
 {
 	SetGameState(eGameState.MapVoting)
+	
+if (FlowState_LockPOI()) {
+	prophunt.nextMapIndex = FlowState_LockedPOI()
+}else if (!file.mapIndexChanged)
+	{
+	prophunt.nextMapIndex = (prophunt.nextMapIndex + 1 ) % prophunt.locationSettings.len()
+	}
+	
+int choice = prophunt.nextMapIndex
+prophunt.mapIndexChanged = false
+prophunt.selectedLocation = prophunt.locationSettings[choice]
+	
 	foreach(player in GetPlayerArray())
 	{
 		try {
@@ -1097,6 +1126,11 @@ SetGameState(eGameState.Playing)
 float endTime = Time() + GetCurrentPlaylistVarFloat("flowstatePROPHUNTLimitTime", 300 )
 	array<entity> IMCplayers = GetPlayerArrayOfTeam(TEAM_IMC)
 	array<entity> MILITIAplayers = GetPlayerArrayOfTeam(TEAM_MILITIA)
+
+//array<vector> ProphuntSpawns = GetPROPHUNTlocations(file.selectedLocation.name, GetMapName())
+//array<vector> ShuffledSpawnes = shuffleDropShipArray(ProphuntSpawns, 10)
+//int spawni = RandomInt(4)
+
 
 //this is for debuggin, so I can changelevel and still have enemy(two instances of the game)
 if (IMCplayers.len() == 2 && MILITIAplayers.len() == 0)

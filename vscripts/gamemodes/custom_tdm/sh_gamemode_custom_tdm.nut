@@ -122,6 +122,19 @@ void function Sh_CustomTDM_Init()
                 <0, 0, 1000>
             )
         )
+		
+		RegisterLocationPROPHUNT(
+            NewLocationSettings(
+                "Ash's Redemption",
+                [
+                    NewLocPair(<-22104, 6009, -26929>, <0, 90, 0>),
+					NewLocPair(<-21372, 3709, -26955>, <0, 90, 0>),
+                    NewLocPair(<-19356, 6397, -26861>, <0, 90, 0>),
+					NewLocPair(<-20713, 7409, -26742>, <0, 90, 0>)
+                ],
+                <0, 0, 1000>
+            )
+        )
         break
 		
 	case "mp_rr_canyonlands_mu1":
@@ -245,6 +258,117 @@ void function Sh_CustomTDM_Init()
                     NewLocPair(<34965, 1718, 3529>, <0, 45, 0>),
                     NewLocPair(<32654, -1552, 3228>, <0, -90, 0>)
 
+                ],
+                <0, 0, 3000>
+            )
+        )
+		
+				RegisterLocationPROPHUNT(
+            NewLocationSettings(
+                "Hillside Outspot",
+                [
+                    NewLocPair(<-20579, 6322, 2912>, <0, -100, 0>),
+                    NewLocPair(<-17075, 7502, 3206>, <0, -90, 0>),
+                    NewLocPair(<-14421, -405, 3315>, <0, 62, 0>),
+                    NewLocPair(<-18633, -1146, 3320>, <0, 114, 0>)
+                ],
+                <0, 0, 3000>
+            )
+        )
+		RegisterLocationPROPHUNT(
+            NewLocationSettings(
+                "Skull Town",
+                [
+                    NewLocPair(<-9320, -13528, 3167>, <0, -100, 0>),
+                    NewLocPair(<-7544, -13240, 3161>, <0, -115, 0>),
+                    NewLocPair(<-10250, -18320, 3323>, <0, 100, 0>),
+                    NewLocPair(<-13261, -18100, 3337>, <0, 20, 0>)
+                ],
+                <0, 0, 3000>
+            )
+        )
+		RegisterLocationPROPHUNT(
+            NewLocationSettings(
+                "Containment",
+                [
+                    NewLocPair(<-7291, 19547, 2978>, <0, -65, 0>),
+                    NewLocPair(<-3906, 19557, 2733>, <0, -123, 0>),
+                    NewLocPair(<-3084, 16315, 2566>, <0, 144, 0>),
+                    NewLocPair(<-6517, 15833, 2911>, <0, 51, 0>)
+                ],
+                <0, 0, 3000>
+            )
+        )
+				RegisterLocationPROPHUNT(
+            NewLocationSettings(
+                "Gaunlet",
+                [
+                    NewLocPair(<-21271, -15275, 2781>, <0, 90, 0>),
+                    NewLocPair(<-22952, -13304, 2718>, <0, 5, 0>),
+                    NewLocPair(<-22467, -9567, 2949>, <0, -85, 0>),
+                    NewLocPair(<-18494, -10427, 2825>, <0, -155, 0>)
+				],
+                <0, 0, 4000>
+            )
+        )
+		 RegisterLocationPROPHUNT(
+            NewLocationSettings(
+                "Market",
+                [
+                    NewLocPair(<-110, -9977, 2987>, <0, 0, 0>),
+                    NewLocPair(<-1605, -10300, 3053>, <0, -100, 0>),
+                    NewLocPair(<4600, -11450, 2950>, <0, 180, 0>),
+                    NewLocPair(<3150, -11153, 3053>, <0, 100, 0>)
+                ],
+                <0, 0, 3000>
+            )
+        )
+		RegisterLocationPROPHUNT(
+            NewLocationSettings(
+                "Labs",
+                [
+                    NewLocPair(<27576, 8062, 2910>, <0, -115, 0>),
+					NewLocPair(<24545, 2387, 4100>, <0, -7, 0>),
+                    NewLocPair(<25924, 2161, 3848>, <0, -9, 0>),
+                    NewLocPair(<28818, 2590, 3798>, <0, 117, 0>)
+                ],
+                <0, 0, 3000>
+            )
+        )
+		RegisterLocationPROPHUNT(
+            NewLocationSettings(
+                "Repulsor",
+                [
+                    NewLocPair(<28095, -16983, 4786>, <0, 140, 0>),
+                    NewLocPair(<29475, -12237, 5769>, <0, -157, 0>),
+                    NewLocPair(<20567, -13551, 4821>, <0, -39, 0>),
+                    NewLocPair(<22026, -17661, 5789>, <0, 21, 0>)
+				],
+                <0, 0, 3000>
+            )
+        )
+
+		RegisterLocationPROPHUNT(
+			NewLocationSettings(
+                "Cage",
+                [
+                    NewLocPair(<15604, -1068, 5833>, <0, -126, 0>),
+                    NewLocPair(<18826, -4314, 5032>, <0, 173, 0>),
+                    NewLocPair(<19946, 32, 4960>, <0, -168, 0>),
+                    NewLocPair(<12335, -1446, 3984>, <0, 2, 0>)
+                ],
+                <0, 0, 3000>
+            )
+        )
+
+		RegisterLocationPROPHUNT(
+            NewLocationSettings(
+                "Swamps",
+                [
+                    NewLocPair(<37886, -4012, 3300>, <0, 167, 0>),
+                    NewLocPair(<34392, -5974, 3017>, <0, 51, 0>),
+                    NewLocPair(<29457, -2989, 2895>, <0, -17, 0>),
+                    NewLocPair(<34582, 2300, 2998>, <0, -92, 0>)
                 ],
                 <0, 0, 3000>
             )
@@ -534,6 +658,155 @@ case "mp_rr_canyonlands_64k_x_64k":
                 <0, 0, 3000>
             )
         )
+
+
+
+        RegisterLocationPROPHUNT(
+            NewLocationSettings(
+                "Interstellar Relay",
+                [
+                    NewLocPair(<26420, 31700, 4790>, <0, -90, 0>),
+                    NewLocPair(<29260, 26245, 4210>, <0, 45, 0>),
+                    NewLocPair(<29255, 24360, 4210>, <0, 0, 0>),
+                    NewLocPair(<24445, 28970, 4340>, <0, -90, 0>)
+                ],
+                <0, 0, 3000>
+            )
+        )
+        RegisterLocationPROPHUNT(
+            NewLocationSettings(
+                "Slum Lakes",
+                [
+                    NewLocPair(<-20060, 23800, 2655>, <0, 110, 0>),
+                    NewLocPair(<-20245, 24475, 2810>, <0, -160, 0>),
+                    NewLocPair(<-25650, 22025, 2270>, <0, 20, 0>),
+                    NewLocPair(<-25550, 21635, 2590>, <0, 20, 0>)
+                ],
+                <0, 0, 3000>
+            )
+        )
+        RegisterLocationPROPHUNT(
+            NewLocationSettings(
+                "Little Town",
+                [
+                    NewLocPair(<-30190, 12473, 3186>, <0, -90, 0>),
+                    NewLocPair(<-28773, 11228, 3210>, <0, 180, 0>),
+                    NewLocPair(<-29802, 9886, 3217>, <0, 90, 0>),
+                    NewLocPair(<-30895, 10733, 3202>, <0, 0, 0>)
+                ],
+                <0, 0, 3000>
+            )
+        )
+        RegisterLocationPROPHUNT(
+            NewLocationSettings(
+                "Runoff",
+                [
+                    NewLocPair(<-23380, 9634, 3371>, <0, 90, 0>),
+                    NewLocPair(<-24917, 11273, 3085>, <0, 0, 0>),
+                    NewLocPair(<-23614, 13605, 3347>, <0, -90, 0>),
+                    NewLocPair(<-24697, 12631, 3085>, <0, 0, 0>)
+                ],
+                <0, 0, 3000>
+            )
+        )
+        RegisterLocationPROPHUNT(
+            NewLocationSettings(
+                "Thunderdome",
+                [
+                    NewLocPair(<-20216, -21612, 3191>, <0, -67, 0>),
+                    NewLocPair(<-16035, -20591, 3232>, <0, -133, 0>),
+                    NewLocPair(<-16584, -24859, 2642>, <0, 165, 0>),
+                    NewLocPair(<-19019, -26209, 2640>, <0, 65, 0>)
+                ],
+                <0, 0, 2000>
+            )
+        )
+        RegisterLocationPROPHUNT(
+            NewLocationSettings(
+                "Water Treatment",
+                [
+                    NewLocPair(<5583, -30000, 3070>, <0, 0, 0>),
+                    NewLocPair(<7544, -29035, 3061>, <0, 130, 0>),
+                    NewLocPair(<10091, -30000, 3070>, <0, 180, 0>),
+                    NewLocPair(<8487, -28838, 3061>, <0, -45, 0>)
+                ],
+                <0, 0, 3000>
+            )
+        )
+        RegisterLocationPROPHUNT(
+            NewLocationSettings(
+                "The Pit",
+                [
+                    NewLocPair(<-18558, 13823, 3605>, <0, 20, 0>),
+                    NewLocPair(<-16514, 16184, 3772>, <0, -77, 0>),
+                    NewLocPair(<-13826, 15325, 3749>, <0, 160, 0>),
+                    NewLocPair(<-16160, 14273, 3770>, <0, 101, 0>)
+                ],
+                <0, 0, 7000>
+            )
+        )
+        RegisterLocationPROPHUNT(
+            NewLocationSettings(
+                "Airbase",
+                [
+                    NewLocPair(<-24140, -4510, 2583>, <0, 90, 0>),
+                    NewLocPair(<-28675, 612, 2600>, <0, 18, 0>),
+                    NewLocPair(<-24688, 1316, 2583>, <0, 180, 0>),
+                    NewLocPair(<-26492, -5197, 2574>, <0, 50, 0>)
+                ],
+                <0, 0, 3000>
+            )
+        )
+
+		RegisterLocationPROPHUNT(
+            NewLocationSettings(
+                "Repulsor",
+                [
+                    NewLocPair(<28095, -16983, 4786>, <0, 140, 0>),
+                    NewLocPair(<29475, -12237, 5769>, <0, -157, 0>),
+                    NewLocPair(<20567, -13551, 4821>, <0, -39, 0>),
+                    NewLocPair(<22026, -17661, 5789>, <0, 21, 0>)
+                ],
+                <0, 0, 3000>
+            )
+        )
+
+		RegisterLocationPROPHUNT(
+            NewLocationSettings(
+                "Swamps",
+                [
+                    NewLocPair(<37886, -4012, 3300>, <0, 167, 0>),
+                    NewLocPair(<34392, -5974, 3017>, <0, 51, 0>),
+                    NewLocPair(<29457, -2989, 2895>, <0, -17, 0>),
+                    NewLocPair(<34582, 2300, 2998>, <0, -92, 0>)
+                ],
+                <0, 0, 3000>
+            )
+        )
+		RegisterLocationPROPHUNT(
+            NewLocationSettings(
+                "Skull Town",
+                [
+                    NewLocPair(<-9320, -13528, 3167>, <0, -100, 0>),
+                    NewLocPair(<-7544, -13240, 3161>, <0, -115, 0>),
+                    NewLocPair(<-10250, -18320, 3323>, <0, 100, 0>),
+                    NewLocPair(<-13261, -18100, 3337>, <0, 20, 0>)
+                ],
+                <0, 0, 3000>
+            )
+        )
+        RegisterLocationPROPHUNT(
+            NewLocationSettings(
+                "Market",
+                [
+                    NewLocPair(<-110, -9977, 2987>, <0, 0, 0>),
+                    NewLocPair(<-1605, -10300, 3053>, <0, -100, 0>),
+                    NewLocPair(<4600, -11450, 2950>, <0, 180, 0>),
+                    NewLocPair(<3150, -11153, 3053>, <0, 100, 0>)
+                ],
+                <0, 0, 3000>
+            )
+        )
         break
         case "mp_rr_desertlands_64k_x_64k":
         case "mp_rr_desertlands_64k_x_64k_nx":
@@ -574,7 +847,7 @@ case "mp_rr_canyonlands_64k_x_64k":
                         NewLocPair(<15008, 30040, -680>, <20, 50, 0>),
                         NewLocPair(<19265, 30022, -680>, <11, 132, 0>),
                         NewLocPair(<19267, 33522, -680>, <10, -138, 0>),
-                        NewLocPair(<14995, 33566, -680>, <16, -45, 0>),
+                        NewLocPair(<14995, 33566, -680>, <16, -45, 0>)
                     ],
                     <0, 0, 3000>
                 )
@@ -758,6 +1031,168 @@ case "mp_rr_canyonlands_64k_x_64k":
                     <0, 0, 6500>
                 )
             )
+			
+			
+			
+			
+		RegisterLocationPROPHUNT(
+                NewLocationSettings(
+                    "TTV Building",
+                    [
+                        NewLocPair(<11393, 5477, -4289>, <0, 90, 0>),
+                        NewLocPair(<12027, 7121, -4290>, <0, -120, 0>),
+                        NewLocPair(<8105, 6156, -4300>, <0, -45, 0>),
+                        NewLocPair(<7965.0, 5976.0, -4266.0>, <0, -135, 0>)
+                    ],
+                    <0, 0, 3000>
+                )
+            )
+		RegisterLocationPROPHUNT(
+                NewLocationSettings(
+                    "Skill trainer By Colombia",
+                    [
+                        NewLocPair(<15008, 30040, -680>, <20, 50, 0>),
+                        NewLocPair(<19265, 30022, -680>, <11, 132, 0>),
+                        NewLocPair(<19267, 33522, -680>, <10, -138, 0>),
+                        NewLocPair(<14995, 33566, -680>, <16, -45, 0>)
+                    ],
+                    <0, 0, 3000>
+                )
+            )
+		RegisterLocationPROPHUNT(
+                NewLocationSettings(
+                    "TTV Building 2",
+                    [
+                        NewLocPair(<1313, 4450, -2990>, <0, 50, 0>),
+                        NewLocPair(<2300, 6571, -4490>, <0, -96, 0>),
+						NewLocPair(<2617, 4668, -4250>, <0, 85, 0>),
+                        NewLocPair(<1200, 4471, -4150>, <0, 50, 0>)
+                    ],
+                    <0, 0, 2000>
+                )
+            )
+		RegisterLocationPROPHUNT(
+                NewLocationSettings(
+                    "Little Town 2",
+                    [
+                        NewLocPair(<-27219, -24393, -4497>, <0, 87, 0>),
+                        NewLocPair(<-26483, -28042, -4209>, <0, 122, 0>),
+                        NewLocPair(<-25174, -26091, -4550>, <0, 177, 0>),
+						NewLocPair(<-29512, -25863, -4462>, <0, 3, 0>)
+                    ],
+                    <0, 0, 2000>
+                )
+            )
+	    RegisterLocationPROPHUNT(
+                NewLocationSettings(
+                    "Dome",
+                    [
+                        NewLocPair(<19351, -41456, -2192>, <0, 96, 0>),
+                        NewLocPair(<22925, -37060, -2169>, <0, -156, 0>),
+                        NewLocPair(<19772, -34549, -2232>, <0, -137, 0>),
+						NewLocPair(<17010, -37125, -2129>, <0, 81, 0>)
+                    ],
+                    <0, 0, 2000>
+                )
+            )
+		RegisterLocationPROPHUNT(
+                NewLocationSettings(
+                    "TTV Building 3",
+                    [
+                        NewLocPair(<6706, 3162, -4114>, <0, 90, 0>),
+                        NewLocPair(<6475, 6338, -4191>, <0, -93, 0>),
+                        NewLocPair(<4626, 5887, -4132>, <0, -28, 0>),
+						NewLocPair(<4962, 3664, -4011>, <0, 29, 0>)
+                    ],
+                    <0, 0, 2000>
+                )
+            )
+
+		RegisterLocationPROPHUNT(
+                NewLocationSettings(
+                    "Capitol Buildings",
+                    [
+                        NewLocPair(<1714, 9650, -4019>, <0, 93, 0>),
+                        NewLocPair(<2850, 13396, -4011>, <0, -98, 0>),
+						NewLocPair(<2239, 12952, -3064>, <0, -92, 0>),
+						NewLocPair(<2508, 10416, -4027>, <0, 178, 0>)
+                    ],
+                    <0, 0, 1000>
+                )
+            )
+
+		RegisterLocationPROPHUNT(
+                NewLocationSettings(
+                    "Overlook",
+                    [
+                        NewLocPair(<32774, 6031, -3239>, <0, 117, 0>),
+                        NewLocPair(<28381, 8963, -3224>, <0, 48, 0>),
+                        NewLocPair(<26327, 11857, -2477>, <0, -43, 0>),
+						NewLocPair(<27303, 14528, -3047>, <0, -42, 0>)
+                    ],
+                    <0, 0, 2000>
+                )
+            )
+
+		RegisterLocationPROPHUNT(
+                NewLocationSettings(
+                    "Refinery",
+                    [
+                        NewLocPair(<22970, 27159, -4612>, <0, 135, 0>),
+                        NewLocPair(<20430, 26481, -4200>, <0, 135, 0>),
+                        NewLocPair(<19142, 30982, -4612>, <0, -45, 0>),
+                        NewLocPair(<18285, 28602, -4200>, <0, -45, 0>)
+                    ],
+                    <0, 0, 6500>
+                )
+            )
+        RegisterLocationPROPHUNT(
+                NewLocationSettings(
+                    "Factory",
+                    [
+                        NewLocPair(<9213, -22942, -3571>, <0, -120, 0>),
+                        NewLocPair(<7825, -24577, -3547>, <0, -165, 0>),
+                        NewLocPair(<5846, -25513, -3523>, <0, 180, 0>),
+                        NewLocPair(<4422, -25937, -3571>, <0, 90, 0>)
+                    ],
+                    <0, 0, 3000>
+                )
+            )
+
+            RegisterLocationPROPHUNT(
+                NewLocationSettings(
+                    "Lava City",
+                    [
+                        NewLocPair(<22663, -28134, -2706>, <0, 40, 0>),
+                        NewLocPair(<22844, -28222, -3030>, <0, 90, 0>),
+                        NewLocPair(<22687, -27605, -3434>, <0, -90, 0>),
+                        NewLocPair(<22610, -26999, -2949>, <0, 90, 0>)
+                    ],
+                    <0, 0, 3000>
+                )
+            )
+            RegisterLocationPROPHUNT(
+                NewLocationSettings(
+                    "Thermal Station",
+                    [
+                        NewLocPair(<-20091, -17683, -3984>, <0, -90, 0>),
+						NewLocPair(<-22919, -20528, -4010>, <0, 0, 0>),
+						NewLocPair(<-17140, -20710, -3973>, <0, -180, 0>),
+                        NewLocPair(<-21054, -23399, -3850>, <0, 90, 0>)
+                    ],
+                    <0, 0, 11000>
+                )
+            )
+
+			RegisterLocationPROPHUNT(
+                NewLocationSettings(
+                    "Surf Purgatory",
+                    [
+                        NewLocPair(<3225,9084,21476>, <0, -90, 0>),
+                    ],
+                    <0, 0, 6500>
+                )
+            )
 						// Shared_RegisterLocation(
                 // NewLocationSettings(
                     // "Capitol City",
@@ -878,6 +1313,14 @@ void function Shared_RegisterLocation(LocationSettings locationSettings)
     #if CLIENT
     Cl_RegisterLocation(locationSettings)
     #endif
+}
+
+void function RegisterLocationPROPHUNT(LocationSettings locationSettings)
+{
+    #if SERVER
+    _RegisterLocationPROPHUNT(locationSettings)
+    #endif
+
 }
 
 // Playlist GET
