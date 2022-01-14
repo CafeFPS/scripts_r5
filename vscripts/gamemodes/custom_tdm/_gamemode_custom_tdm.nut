@@ -1155,6 +1155,7 @@ void function ActualPROPHUNTGameLoop()
 //By Retículo Endoplasmático#5955 (CaféDeColombiaFPS)//
 ///////////////////////////////////////////////////////
 {
+entity bubbleBoundary = CreateBubbleBoundaryPROPHUNT(prophunt.selectedLocation)
 file.tdmState = eTDMState.IN_PROGRESS
 SetGameState(eGameState.Playing)
 
@@ -1324,7 +1325,6 @@ foreach(player in GetPlayerArray())
 			_HandleRespawnPROPHUNT(player)
 		}
 }
-//file.bubbleBoundary = CreateBubbleBoundary(file.selectedLocation)
 WaitFrame()
 }
 
@@ -3204,6 +3204,53 @@ void function MonitorBubbleBoundary(entity bubbleShield, vector bubbleCenter, fl
         wait 1
     }
 }
+
+
+entity function CreateBubbleBoundaryPROPHUNT(LocationSettings location)
+{
+    array<LocPair> spawns = location.spawns
+    vector bubbleCenter
+    foreach(spawn in spawns)
+    {
+        bubbleCenter += spawn.origin
+    }
+    bubbleCenter /= spawns.len()
+    float bubbleRadius = 0
+    foreach(LocPair spawn in spawns)
+    {
+        if(Distance(spawn.origin, bubbleCenter) > bubbleRadius)
+        bubbleRadius = Distance(spawn.origin, bubbleCenter)
+    }
+    bubbleRadius += GetCurrentPlaylistVarFloat("bubble_radius_padding", 730)
+    entity bubbleShield = CreateEntity( "prop_dynamic" )
+	bubbleShield.SetValueForModelKey( BUBBLE_BUNKER_SHIELD_COLLISION_MODEL )
+    bubbleShield.SetOrigin(bubbleCenter)
+    bubbleShield.SetModelScale(bubbleRadius / 235)
+    bubbleShield.kv.CollisionGroup = 0
+    bubbleShield.kv.rendercolor = FlowState_BubbleColor()
+    DispatchSpawn( bubbleShield )
+    thread MonitorBubbleBoundaryPROPHUNT(bubbleShield, bubbleCenter, bubbleRadius)
+    return bubbleShield
+}
+
+void function MonitorBubbleBoundaryPROPHUNT(entity bubbleShield, vector bubbleCenter, float bubbleRadius)
+{
+	wait 31
+    while(IsValid(bubbleShield))
+    {
+        foreach(player in GetPlayerArray_Alive())
+        {
+            if(!IsValid(player)) continue
+            if(Distance(player.GetOrigin(), bubbleCenter) > bubbleRadius)
+            {
+				Remote_CallFunction_Replay( player, "ServerCallback_PlayerTookDamage", 0, 0, 0, 0, DF_BYPASS_SHIELD | DF_DOOMED_HEALTH_LOSS, eDamageSourceId.deathField, null )
+                player.TakeDamage( int( Deathmatch_GetOOBDamagePercent() / 100 * float( player.GetMaxHealth() ) ), null, null, { scriptType = DF_BYPASS_SHIELD | DF_DOOMED_HEALTH_LOSS, damageSourceId = eDamageSourceId.deathField } )
+            }
+        }
+        wait 1
+    }
+}
+
 
 void function PlayerRestoreHP(entity player, float health, float shields)
 {
