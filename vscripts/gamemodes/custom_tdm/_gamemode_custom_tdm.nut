@@ -139,6 +139,8 @@ void function _CustomTDM_Init()
 	AddClientCommandCallback("god", ClientCommand_God)
 	AddClientCommandCallback("ungod", ClientCommand_UnGod)
 	AddClientCommandCallback("next_round", ClientCommand_NextRound)
+	} else {
+	AddClientCommandCallback("next_round", ClientCommand_NextRoundPROPHUNT)
 	}
 	if(FlowState_AllChat()){
 		AddClientCommandCallback("say", ClientCommand_ClientMsg)
@@ -1044,7 +1046,7 @@ void function ActualPROPHUNTLobby()
 	
 if (FlowState_LockPOI()) {
 	prophunt.nextMapIndex = FlowState_LockedPOI()
-}else if (!file.mapIndexChanged)
+}else if (!prophunt.mapIndexChanged)
 	{
 	prophunt.nextMapIndex = (prophunt.nextMapIndex + 1 ) % prophunt.locationSettings.len()
 	}
@@ -1053,6 +1055,15 @@ int choice = prophunt.nextMapIndex
 prophunt.mapIndexChanged = false
 prophunt.selectedLocation = prophunt.locationSettings[choice]
 	
+	
+if(prophunt.selectedLocation.name == "Skill trainer By Colombia"){
+    DestroyPlayerProps()
+    wait 2
+    SkillTrainerLoad()
+} else {
+	DestroyPlayerProps()
+}
+
 	foreach(player in GetPlayerArray())
 	{
 		try {
@@ -1127,10 +1138,7 @@ float endTime = Time() + GetCurrentPlaylistVarFloat("flowstatePROPHUNTLimitTime"
 	array<entity> IMCplayers = GetPlayerArrayOfTeam(TEAM_IMC)
 	array<entity> MILITIAplayers = GetPlayerArrayOfTeam(TEAM_MILITIA)
 
-//array<vector> ProphuntSpawns = GetPROPHUNTlocations(file.selectedLocation.name, GetMapName())
-//array<vector> ShuffledSpawnes = shuffleDropShipArray(ProphuntSpawns, 10)
-//int spawni = RandomInt(4)
-
+array<LocPair> prophuntSpawns = prophunt.selectedLocation.spawns
 
 //this is for debuggin, so I can changelevel and still have enemy(two instances of the game)
 if (IMCplayers.len() == 2 && MILITIAplayers.len() == 0)
@@ -1153,7 +1161,7 @@ foreach(player in GetPlayerArray())
         {
 			ClearInvincible(player)
 			if(player.GetTeam() == TEAM_MILITIA){
-			player.SetOrigin(<9746, 5405, -3390>)
+			player.SetOrigin(prophuntSpawns[RandomInt(4)].origin)
 			player.SetAngles( <0,90,0> )
 			PROPHUNT_GiveRandomProp(RandomInt(22),player)
 			player.SetThirdPersonShoulderModeOn()
@@ -1176,7 +1184,7 @@ wait 30
 foreach(player in GetPlayerArray())
     {
 if(player.GetTeam() == TEAM_IMC){
-					player.SetOrigin(<9732, 4942, -4167>)
+					player.SetOrigin(prophuntSpawns[RandomInt(4)].origin)
 					player.SetThirdPersonShoulderModeOff()
 					TakeAllWeapons(player)
 					string sec = GetCurrentPlaylistVarString("flowstatePROPHUNTweapon", "~~none~~")
@@ -3808,6 +3816,42 @@ bool function ClientCommand_GiveWeapon(entity player, array<string> args)
     }
     if( IsValid(weapon) && !weapon.IsWeaponOffhand() ) player.SetActiveWeaponBySlot(eActiveInventorySlot.mainHand, GetSlotForWeapon(player, weapon))
     return true
+}
+
+bool function ClientCommand_NextRoundPROPHUNT(entity player, array<string> args)
+//Thanks Archtux#9300
+//Modified by Retículo Endoplasmático#5955 and michae\l/#1125
+{
+if(player.GetPlayerName() == file.Hoster || player.GetPlayerName() == file.admin1 || player.GetPlayerName() == file.admin2 || player.GetPlayerName() == file.admin3 || player.GetPlayerName() == file.admin4) {
+	
+    if (args.len()) {
+        try{
+            int mapIndex = int(args[0])
+            prophunt.nextMapIndex = (((mapIndex >= 0 ) && (mapIndex < prophunt.locationSettings.len())) ? mapIndex : RandomIntRangeInclusive(0, prophunt.locationSettings.len() - 1))
+            prophunt.mapIndexChanged = true
+        } catch (e) {}
+
+        try{
+            string now = args[0]
+            if (now == "now")
+            {
+               file.tdmState = eTDMState.NEXT_ROUND_NOW
+            }
+        } catch(e1) {}
+
+        try{
+            string now = args[1]
+            if (now == "now")
+            {
+               file.tdmState = eTDMState.NEXT_ROUND_NOW
+            }
+        } catch(e2) {}
+    }
+	}
+	else {
+	return false
+	}
+	return true
 }
 
 bool function ClientCommand_NextRound(entity player, array<string> args)
