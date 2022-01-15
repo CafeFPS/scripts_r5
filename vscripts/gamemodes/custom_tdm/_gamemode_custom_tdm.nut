@@ -35,7 +35,7 @@ enum eTDMState
 }
 
 struct {
-	string scriptversion = "v2.6"
+	string scriptversion = "v2.7"
     int tdmState = eTDMState.IN_PROGRESS
     int nextMapIndex = 0
 	bool mapIndexChanged = true
@@ -95,6 +95,7 @@ array<LocationSettings> locationSettings
 LocationSettings& selectedLocation
 int nextMapIndex = 0
 bool mapIndexChanged = true
+bool cantUseChangeProp = false
 } prophunt
 
 // ██████   █████  ███████ ███████     ███████ ██    ██ ███    ██  ██████ ████████ ██  ██████  ███    ██ ███████
@@ -128,11 +129,12 @@ void function _CustomTDM_Init()
 	thread _OnPlayerDiedPROPHUNT(victim, attacker, damageInfo)
 	}
 	})
-	AddClientCommandCallback("scoreboard", ClientCommand_Scoreboard)
+	
 	AddClientCommandCallback("latency", ClientCommand_ShowLatency)
 	AddClientCommandCallback("adminsay", ClientCommand_AdminMsg)
 	AddClientCommandCallback("commands", ClientCommand_Help)
 	if(!FlowState_PROPHUNT()){
+	AddClientCommandCallback("scoreboard", ClientCommand_Scoreboard)
 	AddClientCommandCallback("spectate", ClientCommand_SpectateEnemies)
 	AddClientCommandCallback("teambal", ClientCommand_RebalanceTeams)
 	AddClientCommandCallback("circlenow", ClientCommand_CircleNow)
@@ -141,6 +143,8 @@ void function _CustomTDM_Init()
 	AddClientCommandCallback("next_round", ClientCommand_NextRound)
 	} else {
 	AddClientCommandCallback("next_round", ClientCommand_NextRoundPROPHUNT)
+	AddClientCommandCallback("scoreboard", ClientCommand_ScoreboardPROPHUNT)
+	AddClientCommandCallback("prop", ClientCommand_ChangePropPROPHUNT)
 	}
 	if(FlowState_AllChat()){
 		AddClientCommandCallback("say", ClientCommand_ClientMsg)
@@ -700,12 +704,12 @@ void function _HandleRespawn(entity player)
 }
 
 
-void function PROPHUNT_GiveRandomProp(int random, entity player)
+void function PROPHUNT_GiveRandomProp(entity player)
 {
     if (GetMapName() == "mp_rr_desertlands_64k_x_64k" || GetMapName() == "mp_rr_desertlands_64k_x_64k_nx")
 	{
 		
-	switch(random)
+	switch(RandomInt(22))
     {
 		
 					case 0:
@@ -918,7 +922,7 @@ void function _OnPlayerConnectedPROPHUNT(entity player)
 				player.SetPlayerNetBool( "pingEnabled", true )
 				player.SetHealth( 100 )
 				player.SetOrigin(prophuntSpawns[RandomInt(4)].origin)
-				player.Hide()
+				player.MakeInvisible()
 				Message(player, "APEX PROPHUNT", "Game is in progress. You'll spawn in the next round. \n ", 10)
 				player.Code_SetTeam( 20 )
 				player.SetObserverTarget( playersON[RandomInt(playersON.len())] )
@@ -974,7 +978,6 @@ void function _OnPlayerDiedPROPHUNT(entity victim, entity attacker, var damageIn
                 int invscore2 = victim.GetPlayerNetInt( "assists" )
 				invscore2++;
 				victim.SetPlayerNetInt( "assists", invscore2 )
-				victim.Hide()
 			} catch (e) {}
 		
 		}
@@ -1024,9 +1027,7 @@ void function _HandleRespawnPROPHUNT(entity player,bool isTPtofightprops = false
     }
 	try {
 	
-	if(player.GetTeam() == TEAM_IMC || player.GetTeam() == TEAM_MILITIA)
-	{
-			if(IsValid( player ))
+	if(IsValid( player ))
 			{
 				
 				if(FlowState_ForceCharacter()){CharSelect(player)}
@@ -1038,7 +1039,7 @@ void function _HandleRespawnPROPHUNT(entity player,bool isTPtofightprops = false
 				else if(GetMapName() == "mp_rr_canyonlands_mu1" || GetMapName() == "mp_rr_canyonlands_mu1_night" || GetMapName() == "mp_rr_canyonlands_64k_x_64k")
 					{
 					player.SetOrigin(<-19459, 2127, 18404>)}
-							
+				ClearInvincible(player)			
 				player.SetThirdPersonShoulderModeOn()
 				TakeAllWeapons(player)
 				Survival_SetInventoryEnabled( player, true )
@@ -1047,9 +1048,11 @@ void function _HandleRespawnPROPHUNT(entity player,bool isTPtofightprops = false
 				player.SetPlayerNetBool( "pingEnabled", true )
 				player.SetHealth( 100 )
 				TakeAllWeapons(player)
+				player.kv.solid = 6
+				player.kv.CollisionGroup = TRACE_COLLISION_GROUP_PLAYER	
+				player.AllowMantle()
 			}
-	}
-	player.Show()
+
 	} catch (e) {}
 	
 }
@@ -1117,9 +1120,9 @@ if(!GetCurrentPlaylistVarBool("flowstatePROPHUNTDebug", false )){
 		} else {
 						foreach(player in GetPlayerArray())
 			{
-			Message(player, "APEX PROPHUNT", "New player connected, starting now.", 3)
+			Message(player, "APEX PROPHUNT", "New player connected, starting now.", 5, "diag_ap_aiNotify_circleMoves10sec")
 			}
-			wait 3
+			wait 4
 			break 
 		}
 	}
@@ -1132,25 +1135,9 @@ array<entity> MILITIAplayers = GetPlayerArrayOfTeam(TEAM_MILITIA)
 		Message(player, "ATTENTION", "You're a prop. Teleporting in 5 seconds!", 5)
 		}catch(e){}
 	}
-		foreach(player in IMCplayers)
-	{
-		try {
-		Message(player, "ATTENTION", "You're an attacker. Teleporting in 20 seconds!", 5)
-		}catch(e){}
-	}
 wait 5
 WaitFrame()
 }
-
-// void function fixAnglesPROPHUNT(entity player)
-// {
-// // Why is this required?
-// while(true)	{
-// player.SetOrigin( player.EyePosition() )
-// player.SetAngles( player.EyePosition() )
-// // wait 0.5
-// }
-// }
 
 void function ActualPROPHUNTGameLoop()
 ///////////////////////////////////////////////////////
@@ -1177,40 +1164,48 @@ playerNewTeam.Code_SetTeam( TEAM_MILITIA )
 entity playerNewTeam = MILITIAplayers[0]
 playerNewTeam.Code_SetTeam( TEAM_IMC )	
 }
-		ResetAllPlayerStats()
-		GameRules_SetTeamScore(TEAM_IMC, 0)
-		GameRules_SetTeamScore(TEAM_MILITIA, 0)
 		file.deathPlayersCounter = 0
-		
+		prophunt.cantUseChangeProp = false
 foreach(player in GetPlayerArray())
     {
         if(IsValidPlayer(player))
         {
 			ClearInvincible(player)
+			player.SetPlayerGameStat( PGS_ASSAULT_SCORE, 0)
 			if(player.GetTeam() == TEAM_MILITIA){
 			player.SetOrigin(prophuntSpawns[RandomInt(4)].origin)
 			player.SetAngles( <0,90,0> )
-			PROPHUNT_GiveRandomProp(RandomInt(22),player)
+			PROPHUNT_GiveRandomProp(player)
 			player.SetThirdPersonShoulderModeOn()
-			player.kv.solid = 6
-			player.kv.CollisionGroup = TRACE_COLLISION_GROUP_PLAYER	
-			player.AllowMantle()			
-			// thread fixAnglesPROPHUNT(player)
 			TakeAllWeapons(player)
 			player.GiveOffhandWeapon("mp_ability_heal", OFFHAND_TACTICAL)
 			}
 			player.p.playerDamageDealt = 0.0
-
-			if(player.GetTeam() == TEAM_MILITIA){
-			Message(player, "FIND A SPOT TO HIDE", "You have 30 seconds, attackers coming soon! \n                 Don't go outside the ring.", 10)} else if (player.GetTeam() == TEAM_IMC){
-			Message(player, "PROPS ARE HIDING", "Teleporting soon!", 10)}
+			if (player.GetTeam() == TEAM_MILITIA){
+			Message(player, "FIND A SPOT TO HIDE", "                      Attackers coming in 30 seconds! \n\n Type 'prop' in console to change prop up to 3 times before attackers arrive.", 10) }
+			else if(player.GetTeam() == TEAM_IMC){
+			Message(player, "PROPS ARE HIDING", "Teleporting in 30 seconds.", 10)}
 		}
 	}
 wait 30
-
+foreach(player in GetPlayerArray())
+    {
+        if(IsValidPlayer(player))
+        {
+		if (player.GetTeam() == TEAM_MILITIA){
+			Message(player, "ATTENTION", "The attackers have arrived.", 5) }
+			else if (player.GetTeam() == TEAM_IMC){
+			array<entity> MILITIAplayersAlive = GetPlayerArrayOfTeam_Alive(TEAM_MILITIA)
+			Message(player, "ATTENTION", "Kill the props. Props alive: " + MILITIAplayersAlive.len(), 5)
+			}				
+		}
+		
+	}
+prophunt.cantUseChangeProp = true
 foreach(player in GetPlayerArray())
     {
 if(player.GetTeam() == TEAM_IMC){
+					ClearInvincible(player)
 					player.SetOrigin(prophuntSpawns[RandomInt(4)].origin)
 					player.SetThirdPersonShoulderModeOff()
 					TakeAllWeapons(player)
@@ -1318,11 +1313,11 @@ foreach(player in GetPlayerArray())
 		} else {
 			player.StopObserverMode()
 			Remote_CallFunction_NonReplay(player, "ServerCallback_KillReplayHud_Deactivate")
+			player.MakeVisible()
 			player.UnforceStand()
 			player.UnfreezeControlsOnServer()
 			DoRespawnPlayer(player,null)
-			GiveTeamToSpectator(player) //give team to player connected midgame		
-			player.Code_SetTeam( TEAM_MILITIA )
+			GiveTeamToSpectator(player) //give team to player connected midgame
 			_HandleRespawnPROPHUNT(player)
 		}
 }
@@ -3495,6 +3490,60 @@ array<PlayerInfo> spectators = []
 	return msg
 }
 
+string function ScoreboardFinalPROPHUNT(bool fromConsole = false)
+//Este muestra el scoreboard completo
+//Thanks marumaru（vesslanG）#3285
+{
+array<PlayerInfo> playersInfo = []
+array<PlayerInfo> spectators = []
+        foreach(player in GetPlayerArray())
+        {
+          PlayerInfo p
+          p.name = player.GetPlayerName()
+          p.team = player.GetTeam()
+					p.score = player.GetPlayerGameStat( PGS_KILLS )
+					p.deaths = player.GetPlayerGameStat( PGS_DEATHS )
+					p.kd = getkd(p.score,p.deaths)
+					p.damage = int(player.p.playerDamageDealt)
+					p.lastLatency = int(player.GetLatency()* 1000)
+
+					if (fromConsole && player.IsObserver() && IsAlive(player)) {spectators.append(p)}
+					else {playersInfo.append(p)}
+
+        }
+        playersInfo.sort(ComparePlayerInfo)
+		string msg = ""
+		for(int i = 0; i < playersInfo.len(); i++)
+	    {
+		    PlayerInfo p = playersInfo[i]
+            switch(i)
+            {
+                case 0:
+                     msg = msg + "1. " + p.name + ":   " + p.score + " | " + p.deaths + "\n"
+					break
+                case 1:
+                    msg = msg + "2. " + p.name + ":   " + p.score + " | " + p.deaths + "\n"
+                    break
+                case 2:
+                    msg = msg + "3. " + p.name + ":   " + p.score + " | " + p.deaths + "\n"
+                    break
+                default:
+					msg = msg + p.name + ":   " + p.score + " | " + p.deaths + "\n"
+                    break
+            }
+        }
+
+		if (fromConsole && spectators.len() > 0) {
+			msg += "\n\n Players waiting for respawn:\n"
+			for(int i = 0; i < spectators.len(); i++)
+		  {
+			    PlayerInfo p = spectators[i]
+					msg += p.name + "\n"
+			}
+		}
+	return msg
+}
+
 string function LatencyBoard()
 //By Café
 {
@@ -3567,7 +3616,23 @@ void function ResetPlayerStats(entity player)
 // ██      ██      ██ █████   ██ ██  ██    ██        ██      ██    ██ ██ ████ ██ ██ ████ ██ ██ ████ ██ ███████ ██ ██  ██ ██   ██ ███████
 // ██      ██      ██ ██      ██  ██ ██    ██        ██      ██    ██ ██  ██  ██ ██  ██  ██ ██  ██  ██ ██   ██ ██  ██ ██ ██   ██      ██
 //  ██████ ███████ ██ ███████ ██   ████    ██         ██████  ██████  ██      ██ ██      ██ ██      ██ ██   ██ ██   ████ ██████  ███████
+bool function ClientCommand_ChangePropPROPHUNT(entity player, array<string> args)
+{
+	if(prophunt.cantUseChangeProp || player.GetTeam() == TEAM_IMC){
+		return false
+	}
+	int newscore = player.GetPlayerGameStat(PGS_ASSAULT_SCORE) + 1 	
+	player.SetPlayerGameStat( PGS_ASSAULT_SCORE, newscore)
 
+	if (player.GetPlayerGameStat(PGS_ASSAULT_SCORE) <= 3){
+	PROPHUNT_GiveRandomProp(player)	
+
+	return true}
+	else{
+	return false}
+	return true
+}
+	
 bool function ClientCommand_SpectateEnemies(entity player, array<string> args)
 //Thanks Zee#0134
 //Modified By CaféDeColombiaFPS
@@ -4030,6 +4095,18 @@ bool function ClientCommand_Scoreboard(entity player, array<string> args)
 	if(IsValid(player)) {
 		try{
 		Message(player, "- CURRENT SCOREBOARD - ", "\n               CHAMPION: " + GetBestPlayerName() + " / " + GetBestPlayerScore() + " kills. \n\n Name:    K  |   D   |   KD   |   Damage dealt \n" + ScoreboardFinal(true) + "\n\nYour ping: " + ping.tointeger() + "ms. \nHosted by: " + getHoster(), 4)
+		}catch(e) {}
+	}
+	return true
+}
+
+bool function ClientCommand_ScoreboardPROPHUNT(entity player, array<string> args)
+//by michae\l/#1125
+{
+	float ping = player.GetLatency() * 1000 - 40
+	if(IsValid(player)) {
+		try{
+		Message(player, "- PROPHUNT SCOREBOARD - ", "Name:    K  |   D   \n" + ScoreboardFinalPROPHUNT(true) + "\nYour ping: " + ping.tointeger() + "ms. \nHosted by: " + getHoster(), 5)
 		}catch(e) {}
 	}
 	return true

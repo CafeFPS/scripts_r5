@@ -1036,19 +1036,6 @@ case "mp_rr_canyonlands_64k_x_64k":
                     <0, 0, 2000>
                 )
             )
-	    RegisterLocationPROPHUNT(
-                NewLocationSettings(
-                    "Dome",
-                    [
-                        NewLocPair(<19351, -41456, -2192>, <0, 96, 0>),
-                        NewLocPair(<22925, -37060, -2169>, <0, -156, 0>),
-                        NewLocPair(<19772, -34549, -2232>, <0, -137, 0>),
-						NewLocPair(<17010, -37125, -2129>, <0, 81, 0>)
-                    ],
-                    <0, 0, 2000>
-                )
-            )
-
 		RegisterLocationPROPHUNT(
                 NewLocationSettings(
                     "Space Elevator",
@@ -1064,12 +1051,11 @@ case "mp_rr_canyonlands_64k_x_64k":
 
 		RegisterLocationPROPHUNT(
                 NewLocationSettings(
-                    "Overlook",
+                    "Little Town",
                     [
-                        NewLocPair(<32774, 6031, -3239>, <0, 117, 0>),
-                        NewLocPair(<28381, 8963, -3224>, <0, 48, 0>),
-                        NewLocPair(<26327, 11857, -2477>, <0, -43, 0>),
-						NewLocPair(<27303, 14528, -3047>, <0, -42, 0>)
+                        NewLocPair(<22857, 3449, -4050>, <0, -157, 0>),
+                        NewLocPair(<19559, 232, -4035>, <0, 33, 0>),
+                        NewLocPair(<19400, 4384, -4027>, <0, -35, 0>)
                     ],
                     <0, 0, 2000>
                 )
@@ -1087,20 +1073,7 @@ case "mp_rr_canyonlands_64k_x_64k":
                     <0, 0, 6500>
                 )
             )
-        RegisterLocationPROPHUNT(
-                NewLocationSettings(
-                    "Factory",
-                    [
-                        NewLocPair(<2752,-25472,-3072>, <0, -120, 0>),
-                        NewLocPair(<2368,-21696,-3328>, <0, -165, 0>),
-                        NewLocPair(<4096,-23616,-3712>, <0, 180, 0>),
-                        NewLocPair(<6528,-23424,-3710>, <0, 90, 0>)
-                    ],
-                    <0, 0, 3000>
-                )
-            )
-
-            RegisterLocationPROPHUNT(
+         RegisterLocationPROPHUNT(
                 NewLocationSettings(
                     "Lava City",
                     [
@@ -1112,7 +1085,7 @@ case "mp_rr_canyonlands_64k_x_64k":
                     <0, 0, 3000>
                 )
             )
-            RegisterLocationPROPHUNT(
+          RegisterLocationPROPHUNT(
                 NewLocationSettings(
                     "Thermal Station",
                     [
