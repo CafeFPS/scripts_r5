@@ -992,7 +992,7 @@ case "mp_rr_canyonlands_64k_x_64k":
                 NewLocationSettings(
                     "TTV Building",
                     [
-                        NewLocPair(<9792,6272,-4096>, <0, 90, 0>),
+                        NewLocPair(<9732, 4942, -4167>, <0, 90, 0>),
                         NewLocPair(<9216,5568,-3520>, <0, -120, 0>),
                         NewLocPair(<9920,5312,-4096>, <0, -45, 0>),
                         NewLocPair(<9728,5184,-3776>, <0, -135, 0>)
@@ -1016,10 +1016,10 @@ case "mp_rr_canyonlands_64k_x_64k":
                 NewLocationSettings(
                     "TTV Building 2",
                     [
-                        NewLocPair(<1313, 4450, -2990>, <0, 50, 0>),
+                        NewLocPair(<2300, 6571, -4490>, <0, -96, 0>),
                         NewLocPair(<2300, 6571, -4490>, <0, -96, 0>),
 						NewLocPair(<2617, 4668, -4250>, <0, 85, 0>),
-                        NewLocPair(<1200, 4471, -4150>, <0, 50, 0>)
+                        NewLocPair(<2617, 4668, -4250>, <0, 85, 0>)
                     ],
                     <0, 0, 2000>
                 )
@@ -1048,29 +1048,17 @@ case "mp_rr_canyonlands_64k_x_64k":
                     <0, 0, 2000>
                 )
             )
-		RegisterLocationPROPHUNT(
-                NewLocationSettings(
-                    "TTV Building 3",
-                    [
-                        NewLocPair(<6706, 3162, -4114>, <0, 90, 0>),
-                        NewLocPair(<6475, 6338, -4191>, <0, -93, 0>),
-                        NewLocPair(<4626, 5887, -4132>, <0, -28, 0>),
-						NewLocPair(<4962, 3664, -4011>, <0, 29, 0>)
-                    ],
-                    <0, 0, 2000>
-                )
-            )
 
 		RegisterLocationPROPHUNT(
                 NewLocationSettings(
-                    "Capitol Buildings",
+                    "Space Elevator",
                     [
-                        NewLocPair(<1714, 9650, -4019>, <0, 93, 0>),
-                        NewLocPair(<2850, 13396, -4011>, <0, -98, 0>),
-						NewLocPair(<2239, 12952, -3064>, <0, -92, 0>),
-						NewLocPair(<2508, 10416, -4027>, <0, 178, 0>)
+                        NewLocPair(<-12286, 26037, -4012>, <0, -116, 0>),
+                        NewLocPair(<-12318, 28447, -3975>, <0, -122, 0>),
+                        NewLocPair(<-14373, 27785, -3961>, <0, -25, 0>),
+						NewLocPair(<-13858, 27985, -1958>, <0, -46, 0>)
                     ],
-                    <0, 0, 1000>
+                    <0, 0, 2000>
                 )
             )
 

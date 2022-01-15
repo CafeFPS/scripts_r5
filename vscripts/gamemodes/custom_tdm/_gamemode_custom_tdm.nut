@@ -1016,6 +1016,12 @@ void function _HandleRespawnPROPHUNT(entity player,bool isTPtofightprops = false
 //By Retículo Endoplasmático#5955 (CaféDeColombiaFPS)//
 ///////////////////////////////////////////////////////
 {
+	if(!IsValid(player)) return
+	if( player.IsObserver())
+    {
+		player.StopObserverMode()
+        Remote_CallFunction_NonReplay(player, "ServerCallback_KillReplayHud_Deactivate")
+    }
 	try {
 	
 	if(player.GetTeam() == TEAM_IMC || player.GetTeam() == TEAM_MILITIA)
@@ -1196,7 +1202,7 @@ foreach(player in GetPlayerArray())
 			player.p.playerDamageDealt = 0.0
 
 			if(player.GetTeam() == TEAM_MILITIA){
-			Message(player, "FIND A SPOT TO HIDE", "You have 30 seconds, attackers coming soon!", 10)} else if (player.GetTeam() == TEAM_IMC){
+			Message(player, "FIND A SPOT TO HIDE", "You have 30 seconds, attackers coming soon! \n                 Don't go outside the ring.", 10)} else if (player.GetTeam() == TEAM_IMC){
 			Message(player, "PROPS ARE HIDING", "Teleporting soon!", 10)}
 		}
 	}
@@ -3216,7 +3222,7 @@ entity function CreateBubbleBoundaryPROPHUNT(LocationSettings location)
         if(Distance(spawn.origin, bubbleCenter) > bubbleRadius)
         bubbleRadius = Distance(spawn.origin, bubbleCenter)
     }
-    bubbleRadius += GetCurrentPlaylistVarFloat("bubble_radius_padding", 730)
+    bubbleRadius += 200
     entity bubbleShield = CreateEntity( "prop_dynamic" )
 	bubbleShield.SetValueForModelKey( BUBBLE_BUNKER_SHIELD_COLLISION_MODEL )
     bubbleShield.SetOrigin(bubbleCenter)
