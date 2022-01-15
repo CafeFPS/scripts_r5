@@ -1100,7 +1100,7 @@ if(prophunt.selectedLocation.name == "Skill trainer By Colombia"){
 			{
 				player.UnforceStand()
 				player.UnfreezeControlsOnServer()
-				Message(player, "APEX PROPHUNT", "Made by Colombia. Game is starting. ", 8)
+				Message(player, "APEX PROPHUNT", "    Made by Colombia. Game is starting. \n\n" + helpMessagePROPHUNT(), 10)
 			}
 		}catch(e){}
 	}
@@ -1112,7 +1112,7 @@ if(!GetCurrentPlaylistVarBool("flowstatePROPHUNTDebug", false )){
 		array<entity> playersON = GetPlayerArray_Alive()
 		if(playersON.len() == 1 || playersON.len() == 0)
 		{
-			wait 15
+			wait 20
 			foreach(player in GetPlayerArray())
 			{
 				Message(player, "APEX PROPHUNT", "Waiting another player to start.", 10)
@@ -1120,9 +1120,9 @@ if(!GetCurrentPlaylistVarBool("flowstatePROPHUNTDebug", false )){
 		} else {
 						foreach(player in GetPlayerArray())
 			{
-			Message(player, "APEX PROPHUNT", "New player connected, starting now.", 5, "diag_ap_aiNotify_circleMoves10sec")
+			Message(player, "APEX PROPHUNT", "We have enough players, starting now.", 5, "diag_ap_aiNotify_circleMoves10sec")
 			}
-			wait 4
+			wait 5
 			break 
 		}
 	}
@@ -3710,13 +3710,13 @@ Message( sPlayer, "Admin message", playerName + " says: "  + sendMessage, 6)
 string function helpMessage()
 //by michae\l/#1125
 {
-	return "\n\n CONSOLE COMMANDS:\n\n 1. 'kill_self': if you get stuck.\n2. 'scoreboard': displays scoreboard to user. \n3. 'latency': displays ping of all players to user.\n4. 'say [MESSAGE]': send a public message! (" + FlowState_ChatCooldown().tostring() + "s global cooldown) \n5.'spectate': spectate enemies! \n6. 'commands': display this message again."
+	return "\n\n           CONSOLE COMMANDS:\n\n 1. 'kill_self': if you get stuck.\n2. 'scoreboard': displays scoreboard to user. \n3. 'latency': displays ping of all players to user.\n4. 'say [MESSAGE]': send a public message! (" + FlowState_ChatCooldown().tostring() + "s global cooldown) \n5.'spectate': spectate enemies! \n6. 'commands': display this message again."
 }
 
 string function helpMessagePROPHUNT()
 //by michae\l/#1125
 {
-	return "\n\n CONSOLE COMMANDS:\n\n 1. 'kill_self': if you get stuck.\n2. 'scoreboard': displays scoreboard to user. \n3. 'latency': displays ping of all players to user.\n4. 'say [MESSAGE]': send a public message! (" + FlowState_ChatCooldown().tostring() + "s global cooldown) \n5. 'commands': display this message again."
+	return "           Prophunt console commands: \n\n 1. 'prop': change prop up to 3 times before attackers arrive. \n2. 'scoreboard': displays scoreboard to user. \n3. 'latency': displays ping of all players to user.\n4. 'say [MESSAGE]': send a public message! \n5. 'commands': display this message again."
 }
 
 bool function ClientCommand_Help(entity player, array<string> args)
