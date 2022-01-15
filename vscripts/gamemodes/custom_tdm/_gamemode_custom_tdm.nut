@@ -901,11 +901,10 @@ void function _OnPlayerConnectedPROPHUNT(entity player)
 				MakeInvincible(player)
 			}
 			break
-		case eGameState.Playing: //wait round ends, set new player to spectate random attacker player
+		case eGameState.Playing: //wait round ends, set new player to spectate random player
 			if(IsValidPlayer(player))
 			{
 				array<LocPair> prophuntSpawns = prophunt.selectedLocation.spawns
-
 				try{
 					if(FlowState_ForceCharacter()){CharSelect(player)}
 				ItemFlavor playerCharacter = LoadoutSlot_GetItemFlavor( ToEHI( player ), Loadout_CharacterClass() )
@@ -975,9 +974,6 @@ void function _OnPlayerDiedPROPHUNT(entity victim, entity attacker, var damageIn
                 int invscore2 = victim.GetPlayerNetInt( "assists" )
 				invscore2++;
 				victim.SetPlayerNetInt( "assists", invscore2 )
-				// WaitForGameState(eGameState.MapVoting)
-					// _HandleRespawnPROPHUNT( victim )
-				wait 1
 				victim.Hide()
 			} catch (e) {}
 		
@@ -1222,7 +1218,6 @@ if(player.GetTeam() == TEAM_IMC){
 					WpnPulloutOnRespawn(player)
 			}
 	}
-	
 if (FlowState_Timer()){
 while( Time() <= endTime )
 	{

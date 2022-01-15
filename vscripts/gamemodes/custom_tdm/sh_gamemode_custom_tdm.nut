@@ -263,14 +263,14 @@ void function Sh_CustomTDM_Init()
             )
         )
 		
-				RegisterLocationPROPHUNT(
+		RegisterLocationPROPHUNT(
             NewLocationSettings(
                 "Hillside Outspot",
                 [
-                    NewLocPair(<-20579, 6322, 2912>, <0, -100, 0>),
-                    NewLocPair(<-17075, 7502, 3206>, <0, -90, 0>),
-                    NewLocPair(<-14421, -405, 3315>, <0, 62, 0>),
-                    NewLocPair(<-18633, -1146, 3320>, <0, 114, 0>)
+                    NewLocPair(<-16896,3904,3200>, <0, -100, 0>),
+                    NewLocPair(<-15232,3200,3264>, <0, -90, 0>),
+                    NewLocPair(<-14848,2112,3328>, <0, 62, 0>),
+                    NewLocPair(<-18112,3584,3264>, <0, 114, 0>)
                 ],
                 <0, 0, 3000>
             )
@@ -365,10 +365,10 @@ void function Sh_CustomTDM_Init()
             NewLocationSettings(
                 "Swamps",
                 [
-                    NewLocPair(<37886, -4012, 3300>, <0, 167, 0>),
-                    NewLocPair(<34392, -5974, 3017>, <0, 51, 0>),
-                    NewLocPair(<29457, -2989, 2895>, <0, -17, 0>),
-                    NewLocPair(<34582, 2300, 2998>, <0, -92, 0>)
+                    NewLocPair(<32704,-8576,3520>, <0, 167, 0>),
+                    NewLocPair(<34496,-5888,3008>, <0, 51, 0>),
+                    NewLocPair(<33280,-4544,3072>, <0, -17, 0>),
+                    NewLocPair(<30720,-6080,2944>, <0, -92, 0>)
                 ],
                 <0, 0, 3000>
             )
@@ -697,30 +697,7 @@ case "mp_rr_canyonlands_64k_x_64k":
                 <0, 0, 3000>
             )
         )
-        RegisterLocationPROPHUNT(
-            NewLocationSettings(
-                "Runoff",
-                [
-                    NewLocPair(<-23380, 9634, 3371>, <0, 90, 0>),
-                    NewLocPair(<-24917, 11273, 3085>, <0, 0, 0>),
-                    NewLocPair(<-23614, 13605, 3347>, <0, -90, 0>),
-                    NewLocPair(<-24697, 12631, 3085>, <0, 0, 0>)
-                ],
-                <0, 0, 3000>
-            )
-        )
-        RegisterLocationPROPHUNT(
-            NewLocationSettings(
-                "Thunderdome",
-                [
-                    NewLocPair(<-20216, -21612, 3191>, <0, -67, 0>),
-                    NewLocPair(<-16035, -20591, 3232>, <0, -133, 0>),
-                    NewLocPair(<-16584, -24859, 2642>, <0, 165, 0>),
-                    NewLocPair(<-19019, -26209, 2640>, <0, 65, 0>)
-                ],
-                <0, 0, 2000>
-            )
-        )
+
         RegisterLocationPROPHUNT(
             NewLocationSettings(
                 "Water Treatment",
@@ -733,18 +710,7 @@ case "mp_rr_canyonlands_64k_x_64k":
                 <0, 0, 3000>
             )
         )
-        RegisterLocationPROPHUNT(
-            NewLocationSettings(
-                "The Pit",
-                [
-                    NewLocPair(<-18558, 13823, 3605>, <0, 20, 0>),
-                    NewLocPair(<-16514, 16184, 3772>, <0, -77, 0>),
-                    NewLocPair(<-13826, 15325, 3749>, <0, 160, 0>),
-                    NewLocPair(<-16160, 14273, 3770>, <0, 101, 0>)
-                ],
-                <0, 0, 7000>
-            )
-        )
+
         RegisterLocationPROPHUNT(
             NewLocationSettings(
                 "Airbase",
@@ -760,25 +726,12 @@ case "mp_rr_canyonlands_64k_x_64k":
 
 		RegisterLocationPROPHUNT(
             NewLocationSettings(
-                "Repulsor",
-                [
-                    NewLocPair(<28095, -16983, 4786>, <0, 140, 0>),
-                    NewLocPair(<29475, -12237, 5769>, <0, -157, 0>),
-                    NewLocPair(<20567, -13551, 4821>, <0, -39, 0>),
-                    NewLocPair(<22026, -17661, 5789>, <0, 21, 0>)
-                ],
-                <0, 0, 3000>
-            )
-        )
-
-		RegisterLocationPROPHUNT(
-            NewLocationSettings(
                 "Swamps",
                 [
-                    NewLocPair(<37886, -4012, 3300>, <0, 167, 0>),
-                    NewLocPair(<34392, -5974, 3017>, <0, 51, 0>),
-                    NewLocPair(<29457, -2989, 2895>, <0, -17, 0>),
-                    NewLocPair(<34582, 2300, 2998>, <0, -92, 0>)
+                    NewLocPair(<32704,-8576,3520>, <0, 167, 0>),
+                    NewLocPair(<34496,-5888,3008>, <0, 51, 0>),
+                    NewLocPair(<33280,-4544,3072>, <0, -17, 0>),
+                    NewLocPair(<30720,-6080,2944>, <0, -92, 0>)
                 ],
                 <0, 0, 3000>
             )
@@ -1039,10 +992,10 @@ case "mp_rr_canyonlands_64k_x_64k":
                 NewLocationSettings(
                     "TTV Building",
                     [
-                        NewLocPair(<11393, 5477, -4289>, <0, 90, 0>),
-                        NewLocPair(<12027, 7121, -4290>, <0, -120, 0>),
-                        NewLocPair(<8105, 6156, -4300>, <0, -45, 0>),
-                        NewLocPair(<7965.0, 5976.0, -4266.0>, <0, -135, 0>)
+                        NewLocPair(<9792,6272,-4096>, <0, 90, 0>),
+                        NewLocPair(<9216,5568,-3520>, <0, -120, 0>),
+                        NewLocPair(<9920,5312,-4096>, <0, -45, 0>),
+                        NewLocPair(<9728,5184,-3776>, <0, -135, 0>)
                     ],
                     <0, 0, 3000>
                 )
@@ -1075,10 +1028,10 @@ case "mp_rr_canyonlands_64k_x_64k":
                 NewLocationSettings(
                     "Little Town 2",
                     [
-                        NewLocPair(<-27219, -24393, -4497>, <0, 87, 0>),
-                        NewLocPair(<-26483, -28042, -4209>, <0, 122, 0>),
-                        NewLocPair(<-25174, -26091, -4550>, <0, 177, 0>),
-						NewLocPair(<-29512, -25863, -4462>, <0, 3, 0>)
+                        NewLocPair(<-28224,-27264,-4224>, <0, 87, 0>),
+                        NewLocPair(<-28032,-24960,-4096>, <0, 122, 0>),
+                        NewLocPair(<-28096,-26304,-4288>, <0, 177, 0>),
+						NewLocPair(<-28160,-25856,-4544>, <0, 3, 0>)
                     ],
                     <0, 0, 2000>
                 )
@@ -1150,10 +1103,10 @@ case "mp_rr_canyonlands_64k_x_64k":
                 NewLocationSettings(
                     "Factory",
                     [
-                        NewLocPair(<9213, -22942, -3571>, <0, -120, 0>),
-                        NewLocPair(<7825, -24577, -3547>, <0, -165, 0>),
-                        NewLocPair(<5846, -25513, -3523>, <0, 180, 0>),
-                        NewLocPair(<4422, -25937, -3571>, <0, 90, 0>)
+                        NewLocPair(<2752,-25472,-3072>, <0, -120, 0>),
+                        NewLocPair(<2368,-21696,-3328>, <0, -165, 0>),
+                        NewLocPair(<4096,-23616,-3712>, <0, 180, 0>),
+                        NewLocPair(<6528,-23424,-3710>, <0, 90, 0>)
                     ],
                     <0, 0, 3000>
                 )
@@ -1163,10 +1116,10 @@ case "mp_rr_canyonlands_64k_x_64k":
                 NewLocationSettings(
                     "Lava City",
                     [
-                        NewLocPair(<22663, -28134, -2706>, <0, 40, 0>),
-                        NewLocPair(<22844, -28222, -3030>, <0, 90, 0>),
-                        NewLocPair(<22687, -27605, -3434>, <0, -90, 0>),
-                        NewLocPair(<22610, -26999, -2949>, <0, 90, 0>)
+                        NewLocPair(<22912,-28992,-3392>, <0, 40, 0>),
+                        NewLocPair(<24256,-25664,-3520>, <0, 90, 0>),
+                        NewLocPair(<24256,-28288,-3328>, <0, -90, 0>),
+                        NewLocPair(<22656,-27584,-2688>, <0, 90, 0>)
                     ],
                     <0, 0, 3000>
                 )
