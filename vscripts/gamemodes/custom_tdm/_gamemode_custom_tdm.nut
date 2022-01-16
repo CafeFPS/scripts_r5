@@ -330,13 +330,7 @@ void function _OnPlayerConnected(entity player)
 {
     if(!IsValid(player)) return
     GivePassive(player, ePassives.PAS_PILOT_BLOOD)
-    if(!IsAlive(player))
-    {
-        _HandleRespawn(player)
-	if(file.selectedLocation.name != "Surf Purgatory"){
-			ClearInvincible(player)
-		}
-    }
+
 	string nextlocation = file.selectedLocation.name
 			if(FlowState_RandomGunsEverydie())
 			{
@@ -349,12 +343,18 @@ void function _OnPlayerConnected(entity player)
 			else { 
 			Message(player, "WELCOME TO FLOW STATE: FFA/TDM", helpMessage(), 10)
 			}
-	GrantSpawnImmunity(player,2)
-	    switch(GetGameState())
+	switch(GetGameState())
     {
     case eGameState.MapVoting:
 	    if(IsValidPlayer(player) )
         {
+			    if(!IsAlive(player))
+			{
+				_HandleRespawn(player)
+			if(file.selectedLocation.name != "Surf Purgatory"){
+					ClearInvincible(player)
+				}
+			}
 			player.SetThirdPersonShoulderModeOn()
 			HolsterAndDisableWeapons( player )
 						if(FlowState_RandomGunsEverydie()){
@@ -368,13 +368,24 @@ void function _OnPlayerConnected(entity player)
 		}
 		break
 	case eGameState.WaitingForPlayers:
-        player.FreezeControlsOnServer()
+			if(!IsAlive(player))
+		{
+			_HandleRespawn(player)
+		if(file.selectedLocation.name != "Surf Purgatory"){
+				ClearInvincible(player)
+			}
+		}
+        player.UnfreezeControlsOnServer();
+		if(FlowState_ForceCharacter()){
+				CharSelect(player)}
         break
     case eGameState.Playing:
 	    if(IsValidPlayer(player))
         {
 			player.UnfreezeControlsOnServer();
-
+			array<vector> newdropshipspawns = GetNewFFADropShipLocations(file.selectedLocation.name, GetMapName())
+			array<vector> shuffledspawnes = shuffleDropShipArray(newdropshipspawns, 50)
+			int spawni = RandomIntRange(0, shuffledspawnes.len()-1)
 			if(FlowState_RandomGunsEverydie()){
 				UpgradeShields(player, true)
 			}
@@ -382,31 +393,37 @@ void function _OnPlayerConnected(entity player)
 			if(FlowState_Gungame()){
 				KillStreakAnnouncer(player, true)
 			}
-			// if(GetCurrentPlaylistVarBool("flowstateDroppodsOnPlayerConnected", false ) && file.selectedLocation.name != "Surf Purgatory")
-			// {
-				// printl("player spawning in droppod")
-				// array<vector> newdropshipspawns = GetNewFFADropShipLocations(file.selectedLocation.name, GetMapName())
-				// array<vector> shuffledspawnes = shuffleDropShipArray(newdropshipspawns, 50)
-				// int spawni = RandomIntRange(0, 23)
+			    if(!IsAlive(player))
+			{
+				_HandleRespawn(player, true)
+				
+			if(file.selectedLocation.name != "Surf Purgatory"){
+					ClearInvincible(player)
+				}
+			thread GrantSpawnImmunity (player, 4)	
+			}
 
-				// thread AirDropFireteam( shuffledspawnes[spawni] + <0,0,15000>, <0,180,0>, "idle", 0, "droppod_fireteam", player )
-			// }
+			if(GetCurrentPlaylistVarBool("flowstateDroppodsOnPlayerConnected", false ) && file.selectedLocation.name != "Surf Purgatory" || GetCurrentPlaylistVarBool("flowstateDroppodsOnPlayerConnected", false ) && file.selectedLocation.name != "Skill trainer By Colombia")
+			{
+
+				thread AirDropFireteam( shuffledspawnes[spawni] + <0,0,15000>, <0,180,0>, "idle", 0, "droppod_fireteam", player )
+				printl("player spawning in droppod")
+			} else { 
+			TpPlayerToSpawnPoint(player)
+			}
 
         	Remote_CallFunction_NonReplay(player, "ServerCallback_TDM_DoAnnouncement", 1, eTDMAnnounce.ROUND_START)
-	try{
-	if(file.locationSettings.name == "Surf Purgatory"){
-	player.TakeOffhandWeapon(OFFHAND_TACTICAL)
-    player.TakeOffhandWeapon(OFFHAND_ULTIMATE)
-    TakeAllWeapons( player )
-    SetPlayerSettings(player, SURF_SETTINGS)
-    MakeInvincible(player)
-	player.Code_SetTeam( TEAM_IMC )
-	player.GiveWeapon( "mp_weapon_semipistol", WEAPON_INVENTORY_SLOT_ANY )
-	}else{
-	SetPlayerSettings(player, TDM_PLAYER_SETTINGS)
-	}
-	}catch(e){}
-	}
+			try{
+			if(file.locationSettings.name == "Surf Purgatory"){
+			TakeAllWeapons( player )
+			SetPlayerSettings(player, SURF_SETTINGS)
+			MakeInvincible(player)
+			player.GiveWeapon( "mp_weapon_semipistol", WEAPON_INVENTORY_SLOT_ANY )
+			}else{
+			SetPlayerSettings(player, TDM_PLAYER_SETTINGS)
+			}
+			}catch(e){}
+			}
         break
     default:
         break
@@ -562,7 +579,7 @@ file.lastKiller = attacker
 }
 
 
-void function _HandleRespawn(entity player)
+void function _HandleRespawn(entity player, bool isDroppodSpawn = false)
 ///////////////////////////////////////////////////////
 //By Retículo Endoplasmático#5955 and michae\l/#1125 //
 ///////////////////////////////////////////////////////
@@ -657,7 +674,8 @@ void function _HandleRespawn(entity player)
 	try {
 	if( IsValidPlayer( player ) && IsAlive(player))
         {
-	TpPlayerToSpawnPoint(player)
+	if(!isDroppodSpawn){
+	TpPlayerToSpawnPoint(player)}
 	
     if(file.selectedLocation.name == "Surf Purgatory"){
 	SetPlayerSettings(player, SURF_SETTINGS)
