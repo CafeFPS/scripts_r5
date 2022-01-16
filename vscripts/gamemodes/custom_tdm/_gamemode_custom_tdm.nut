@@ -172,16 +172,10 @@ if(!FlowState_PROPHUNT()){
         file.whitelistedWeapons.append(GetCurrentPlaylistVarString("whitelisted_weapon_" + i.tostring(), "~~none~~"))
     }
 
-	if(GetMapName() == "mp_rr_desertlands_64k_x_64k" || GetMapName() == "mp_rr_desertlands_64k_x_64k_nx" || GetMapName() == "mp_rr_canyonlands_mu1" || GetMapName() == "mp_rr_canyonlands_mu1_night" || GetMapName() == "mp_rr_canyonlands_64k_x_64k")
-	{
-		thread CreateShipRoomFallTriggers()
-	}
-
     if(!FlowState_PROPHUNT()){
 	thread RunTDM() 
 	} else {
 	thread RunPROPHUNT()
-	thread EmitSoundOnSprintingProp()
 	}//Go to Game Loop
     }
 
@@ -1078,6 +1072,10 @@ void function ActualPROPHUNTLobby()
 {
 	SetGameState(eGameState.MapVoting)
 	file.FallTriggersEnabled = true
+	if(GetMapName() == "mp_rr_desertlands_64k_x_64k" || GetMapName() == "mp_rr_desertlands_64k_x_64k_nx" || GetMapName() == "mp_rr_canyonlands_mu1" || GetMapName() == "mp_rr_canyonlands_mu1_night" || GetMapName() == "mp_rr_canyonlands_64k_x_64k")
+	{
+		thread CreateShipRoomFallTriggers()
+	}
 if (FlowState_LockPOI()) {
 	prophunt.nextMapIndex = FlowState_LockedPOI()
 }else if (!prophunt.mapIndexChanged)
@@ -1150,8 +1148,6 @@ void function EmitSoundOnSprintingProp()
 //By Retículo Endoplasmático#5955 (CaféDeColombiaFPS)//
 ///////////////////////////////////////////////////////
 {
-	for(; ;)
-    {
 		while(prophunt.InProgress)
 		{
 		array<entity> MILITIAplayers = GetPlayerArrayOfTeam(TEAM_MILITIA)
@@ -1164,8 +1160,6 @@ void function EmitSoundOnSprintingProp()
 			}
 		wait 0.2
 		}
-		wait 1
-	}
 }
 
 void function ActualPROPHUNTGameLoop()
@@ -1176,6 +1170,7 @@ void function ActualPROPHUNTGameLoop()
 entity bubbleBoundary = CreateBubbleBoundaryPROPHUNT(prophunt.selectedLocation)
 file.tdmState = eTDMState.IN_PROGRESS
 prophunt.InProgress = true
+thread EmitSoundOnSprintingProp()
 SetGameState(eGameState.Playing)
 
 float endTime = Time() + GetCurrentPlaylistVarFloat("flowstatePROPHUNTLimitTime", 300 )
@@ -1197,7 +1192,6 @@ playerNewTeam.Code_SetTeam( TEAM_IMC )
 
 		file.deathPlayersCounter = 0
 		prophunt.cantUseChangeProp = false
-		file.FallTriggersEnabled = false
 foreach(player in GetPlayerArray())
     {
         if(IsValidPlayer(player))
@@ -1226,6 +1220,7 @@ if(player.GetTeam() == TEAM_IMC){
 ScreenFadeToBlackForever(player)}
 	}
 wait 5
+file.FallTriggersEnabled = false
 foreach(player in GetPlayerArray())
     {
         if(IsValidPlayer(player))
@@ -1959,8 +1954,6 @@ void function CreateShipRoomFallTriggers()
 			trigger.Destroy()
 		}
 	)
-    for(; ;)
-    {
 		while ( file.FallTriggersEnabled )
 		{
 			array<entity> touchingEnts = trigger.GetTouchingEntities()
@@ -1981,8 +1974,6 @@ void function CreateShipRoomFallTriggers()
 			}
 			wait 0.01
 		}
-		wait 1
-	}
 }
 
 array<ConsumableInventoryItem> function FlowStateGetAllDroppableItems( entity player )
@@ -2379,6 +2370,10 @@ void function VotingPhase()
     DestroyPlayerProps();
     SetGameState(eGameState.MapVoting)
 	file.FallTriggersEnabled = true
+	if(GetMapName() == "mp_rr_desertlands_64k_x_64k" || GetMapName() == "mp_rr_desertlands_64k_x_64k_nx" || GetMapName() == "mp_rr_canyonlands_mu1" || GetMapName() == "mp_rr_canyonlands_mu1_night" || GetMapName() == "mp_rr_canyonlands_64k_x_64k")
+	{
+		thread CreateShipRoomFallTriggers()
+	}
 	if (FlowState_RandomGuns() )
     {
         file.randomprimary = RandomIntRangeInclusive( 0, 15 )
