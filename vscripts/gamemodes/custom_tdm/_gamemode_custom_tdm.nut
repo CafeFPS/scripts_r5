@@ -721,20 +721,20 @@ void function PROPHUNT_GiveRandomProp(entity player)
 			player.SetArmsModelOverride( $"mdl/barriers/concrete/concrete_barrier_01.rmdl" )
             break;
 					case 2:
-            player.SetBodyModelOverride( $"mdl/furniture/office_chair_leather.rmdl" )
-			player.SetArmsModelOverride( $"mdl/furniture/office_chair_leather.rmdl" )
+            player.SetBodyModelOverride( $"mdl/eden/eden_electrical_transformer_01.rmdl" )
+			player.SetArmsModelOverride( $"mdl/eden/eden_electrical_transformer_01.rmdl" )
             break;
 					case 3:
             player.SetBodyModelOverride( $"mdl/vehicles_r5/land/msc_truck_samson_v2/veh_land_msc_truck_samson_v2.rmdl" )
 			player.SetArmsModelOverride( $"mdl/vehicles_r5/land/msc_truck_samson_v2/veh_land_msc_truck_samson_v2.rmdl" )
             break;
 					case 4:
-            player.SetBodyModelOverride( $"mdl/industrial/traffic_barrel_02.rmdl" )
-			player.SetArmsModelOverride( $"mdl/industrial/traffic_barrel_02.rmdl" )
+            player.SetBodyModelOverride( $"mdl/rocks/rock_lava_small_moss_desertlands_03.rmdl" )
+			player.SetArmsModelOverride( $"mdl/rocks/rock_lava_small_moss_desertlands_03.rmdl" )
             break;
 					case 5:
-            player.SetBodyModelOverride( $"mdl/furniture/office_desk_shelved.rmdl" )
-			player.SetArmsModelOverride( $"mdl/furniture/office_desk_shelved.rmdl" )
+            player.SetBodyModelOverride( $"mdl/barriers/concrete/concrete_barrier_fence_tarp_128.rmdl" )
+			player.SetArmsModelOverride( $"mdl/barriers/concrete/concrete_barrier_fence_tarp_128.rmdl" )
             break;
 					case 6:
             player.SetBodyModelOverride( $"mdl/angel_city/vending_machine.rmdl" )
@@ -753,8 +753,8 @@ void function PROPHUNT_GiveRandomProp(entity player)
 			player.SetArmsModelOverride( $"mdl/colony/antenna_05_colony.rmdl" )
             break;
 					case 10:
-            player.SetBodyModelOverride( $"mdl/furniture/office_laptop.rmdl" )
-			player.SetArmsModelOverride( $"mdl/furniture/office_laptop.rmdl" )
+            player.SetBodyModelOverride( $"mdl/pipes/pipe_modular_painted_grey_45_angle.rmdl" )
+			player.SetArmsModelOverride( $"mdl/pipes/pipe_modular_painted_grey_45_angle.rmdl" )
             break;
 					case 11:
             player.SetBodyModelOverride( $"mdl/garbage/garbage_bag_plastic_a.rmdl" )
@@ -769,8 +769,8 @@ void function PROPHUNT_GiveRandomProp(entity player)
 			player.SetArmsModelOverride( $"mdl/angel_city/box_small_01.rmdl" )
             break;
 					case 14:
-            player.SetBodyModelOverride( $"mdl/furniture/office_chair_leather.rmdl" )
-			player.SetArmsModelOverride( $"mdl/furniture/office_chair_leather.rmdl" )
+            player.SetBodyModelOverride( $"mdl/barriers/concrete/concrete_barrier_fence_128.rmdl" )
+			player.SetArmsModelOverride( $"mdl/barriers/concrete/concrete_barrier_fence_128.rmdl" )
             break;
 					case 15:
             player.SetBodyModelOverride( $"mdl/containers/slumcity_oxygen_tank_red.rmdl" )
@@ -781,8 +781,8 @@ void function PROPHUNT_GiveRandomProp(entity player)
 			player.SetArmsModelOverride( $"mdl/containers/box_shrinkwrapped.rmdl" )
             break;
 					case 17:
-            player.SetBodyModelOverride( $"mdl/furniture/office_chair_leather.rmdl" )
-			player.SetArmsModelOverride( $"mdl/furniture/office_chair_leather.rmdl" )
+            player.SetBodyModelOverride( $"mdl/colony/farmland_fridge_01.rmdl" )
+			player.SetArmsModelOverride( $"mdl/colony/farmland_fridge_01.rmdl" )
             break;
 					case 18:
             player.SetBodyModelOverride( $"mdl/furniture/chair_beanbag_01.rmdl" )
@@ -1182,6 +1182,8 @@ foreach(player in GetPlayerArray())
 			player.SetOrigin(prophuntSpawns[RandomInt(4)].origin)
 			player.SetAngles( <0,90,0> )
 			PROPHUNT_GiveRandomProp(player)
+			player.kv.solid = 6
+			player.kv.CollisionGroup = TRACE_COLLISION_GROUP_PLAYER
 			player.SetThirdPersonShoulderModeOn()
 			TakeAllWeapons(player)
 			player.GiveOffhandWeapon("mp_ability_heal", OFFHAND_TACTICAL)
@@ -1213,6 +1215,8 @@ foreach(player in GetPlayerArray())
 if(player.GetTeam() == TEAM_IMC){
 					ClearInvincible(player)
 					player.SetOrigin(prophuntSpawns[RandomInt(4)].origin)
+					player.kv.solid = 6
+					player.kv.CollisionGroup = TRACE_COLLISION_GROUP_PLAYER
 					player.SetThirdPersonShoulderModeOff()
 					TakeAllWeapons(player)
 					string sec = GetCurrentPlaylistVarString("flowstatePROPHUNTweapon", "~~none~~")
