@@ -96,6 +96,7 @@ LocationSettings& selectedLocation
 int nextMapIndex = 0
 bool mapIndexChanged = true
 bool cantUseChangeProp = false
+bool InProgress = false
 } prophunt
 
 // ██████   █████  ███████ ███████     ███████ ██    ██ ███    ██  ██████ ████████ ██  ██████  ███    ██ ███████
@@ -769,8 +770,8 @@ void function PROPHUNT_GiveRandomProp(entity player)
 			player.SetArmsModelOverride( $"mdl/angel_city/box_small_01.rmdl" )
             break;
 					case 14:
-            player.SetBodyModelOverride( $"mdl/barriers/concrete/concrete_barrier_fence_128.rmdl" )
-			player.SetArmsModelOverride( $"mdl/barriers/concrete/concrete_barrier_fence_128.rmdl" )
+            player.SetBodyModelOverride( $"mdl/vehicles_r5/land/msc_suv_partum/veh_land_msc_suv_partum_static.rmdl" )
+			player.SetArmsModelOverride( $"mdl/vehicles_r5/land/msc_suv_partum/veh_land_msc_suv_partum_static.rmdl" )
             break;
 					case 15:
             player.SetBodyModelOverride( $"mdl/containers/slumcity_oxygen_tank_red.rmdl" )
@@ -849,7 +850,6 @@ void function _OnPlayerConnectedPROPHUNT(entity player)
 				SetPlayerSettings(player, PROPHUNT_SETTINGS)
 				DoRespawnPlayer( player, null )
 				Survival_SetInventoryEnabled( player, true )
-				GiveLoadoutRelatedWeapons(player)
 				player.SetPlayerNetInt( "respawnStatus", eRespawnStatus.NONE )
 				player.SetPlayerNetBool( "pingEnabled", true )
 				player.SetHealth( 100 )
@@ -865,7 +865,6 @@ void function _OnPlayerConnectedPROPHUNT(entity player)
 				player.SetThirdPersonShoulderModeOn()
 				player.UnforceStand()
 				player.UnfreezeControlsOnServer()
-				TakeAllWeapons(player)
 				
 			}
 			break
@@ -893,7 +892,6 @@ void function _OnPlayerConnectedPROPHUNT(entity player)
 				SetPlayerSettings(player, PROPHUNT_SETTINGS)
 				DoRespawnPlayer( player, null )
 				Survival_SetInventoryEnabled( player, true )
-				GiveLoadoutRelatedWeapons(player)
 				player.SetPlayerNetInt( "respawnStatus", eRespawnStatus.NONE )
 				player.SetPlayerNetBool( "pingEnabled", true )
 				player.SetHealth( 100 )
@@ -909,7 +907,6 @@ void function _OnPlayerConnectedPROPHUNT(entity player)
 				player.SetThirdPersonShoulderModeOn()
 				player.UnforceStand()
 				player.UnfreezeControlsOnServer()
-				TakeAllWeapons(player)
 			}
 			break
 		case eGameState.Playing: //wait round ends, set new player to spectate random player
@@ -924,7 +921,6 @@ void function _OnPlayerConnectedPROPHUNT(entity player)
 				SetPlayerSettings(player, PROPHUNT_SETTINGS)
 				DoRespawnPlayer( player, null )
 				Survival_SetInventoryEnabled( player, true )
-				GiveLoadoutRelatedWeapons(player)
 				player.SetPlayerNetInt( "respawnStatus", eRespawnStatus.NONE )
 				player.SetPlayerNetBool( "pingEnabled", true )
 				player.SetHealth( 100 )
@@ -932,7 +928,6 @@ void function _OnPlayerConnectedPROPHUNT(entity player)
 				player.kv.solid = 6
 				player.kv.CollisionGroup = TRACE_COLLISION_GROUP_PLAYER
 				player.AllowMantle()
-				TakeAllWeapons(player)
 				Message(player, "APEX PROPHUNT", "Game is in progress. You'll spawn in the next round. \n ", 10)
 				player.Code_SetTeam( 20 )
 				player.SetObserverTarget( playersON[RandomInt(playersON.len()-1)] )
@@ -1023,7 +1018,7 @@ thread attackerHandleFunc()
     }
 }
 
-void function _HandleRespawnPROPHUNT(entity player,bool isTPtofightprops = false)
+void function _HandleRespawnPROPHUNT(entity player)
 ///////////////////////////////////////////////////////
 //By Retículo Endoplasmático#5955 (CaféDeColombiaFPS)//
 ///////////////////////////////////////////////////////
@@ -1046,16 +1041,12 @@ void function _HandleRespawnPROPHUNT(entity player,bool isTPtofightprops = false
 					player.SetOrigin(<-19459, 2127, 6404>)}
 				else if(GetMapName() == "mp_rr_canyonlands_mu1" || GetMapName() == "mp_rr_canyonlands_mu1_night" || GetMapName() == "mp_rr_canyonlands_64k_x_64k")
 					{
-					player.SetOrigin(<-19459, 2127, 18404>)}		
+					player.SetOrigin(<-19459, 2127, 18404>)}
 				player.SetThirdPersonShoulderModeOn()
 				Survival_SetInventoryEnabled( player, true )
-				GiveLoadoutRelatedWeapons(player)
-				Inventory_SetPlayerEquipment(player, WHITE_SHIELD, "armor")
 				player.SetPlayerNetInt( "respawnStatus", eRespawnStatus.NONE )
 				player.SetPlayerNetBool( "pingEnabled", true )
 				player.SetHealth( 100 )
-				TakeAllWeapons(player)
-				ClearInvincible(player)
 			}
 
 	} catch (e) {}
@@ -1063,6 +1054,9 @@ void function _HandleRespawnPROPHUNT(entity player,bool isTPtofightprops = false
 }
 
 void function RunPROPHUNT()
+///////////////////////////////////////////////////////
+//By Retículo Endoplasmático#5955 (CaféDeColombiaFPS)//
+///////////////////////////////////////////////////////
 {
     WaitForGameState(eGameState.Playing)
     AddSpawnCallback("prop_dynamic", _OnPropDynamicSpawned)
@@ -1075,6 +1069,9 @@ void function RunPROPHUNT()
 }
 
 void function ActualPROPHUNTLobby()
+///////////////////////////////////////////////////////
+//By Retículo Endoplasmático#5955 (CaféDeColombiaFPS)//
+///////////////////////////////////////////////////////
 {
 	SetGameState(eGameState.MapVoting)
 	
@@ -1117,10 +1114,10 @@ if(!GetCurrentPlaylistVarBool("flowstatePROPHUNTDebug", false )){
 		array<entity> playersON = GetPlayerArray_Alive()
 		if(playersON.len() == 1 || playersON.len() == 0)
 		{
-			wait 20
+			wait 15
 			foreach(player in GetPlayerArray())
 			{
-				Message(player, "APEX PROPHUNT", "Waiting another player to start.", 10)
+				Message(player, "APEX PROPHUNT", "Waiting another player to start.", 5)
 			}	
 		} else {
 						foreach(player in GetPlayerArray())
@@ -1130,6 +1127,7 @@ if(!GetCurrentPlaylistVarBool("flowstatePROPHUNTDebug", false )){
 			wait 5
 			break 
 		}
+		wait 1
 	}
 }
 array<entity> IMCplayers = GetPlayerArrayOfTeam(TEAM_IMC)
@@ -1144,6 +1142,25 @@ wait 5
 WaitFrame()
 }
 
+void function EmitSoundOnSprintingProp()
+///////////////////////////////////////////////////////
+//By Retículo Endoplasmático#5955 (CaféDeColombiaFPS)//
+///////////////////////////////////////////////////////
+{
+array<entity> MILITIAplayers = GetPlayerArrayOfTeam(TEAM_MILITIA)
+	while(prophunt.InProgress)
+	{
+		foreach(player in MILITIAplayers)
+		{
+			if(player.IsSprinting())
+			{
+			EmitSoundOnEntity( player, "husaria_sprint_default_3p" )
+			} 
+		}
+	wait 0.2
+	}
+}
+
 void function ActualPROPHUNTGameLoop()
 ///////////////////////////////////////////////////////
 //By Retículo Endoplasmático#5955 (CaféDeColombiaFPS)//
@@ -1151,6 +1168,8 @@ void function ActualPROPHUNTGameLoop()
 {
 entity bubbleBoundary = CreateBubbleBoundaryPROPHUNT(prophunt.selectedLocation)
 file.tdmState = eTDMState.IN_PROGRESS
+prophunt.InProgress = true
+thread EmitSoundOnSprintingProp()
 SetGameState(eGameState.Playing)
 
 float endTime = Time() + GetCurrentPlaylistVarFloat("flowstatePROPHUNTLimitTime", 300 )
@@ -1176,22 +1195,20 @@ foreach(player in GetPlayerArray())
     {
         if(IsValidPlayer(player))
         {
+			Inventory_SetPlayerEquipment(player, WHITE_SHIELD, "armor")
 			ClearInvincible(player)
 			player.SetPlayerGameStat( PGS_ASSAULT_SCORE, 0)
+			player.p.playerDamageDealt = 0.0
 			if(player.GetTeam() == TEAM_MILITIA){
-			player.SetOrigin(prophuntSpawns[RandomInt(4)].origin)
+			player.SetOrigin(prophuntSpawns[RandomInt(prophuntSpawns.len()-1)].origin)
 			player.SetAngles( <0,90,0> )
 			PROPHUNT_GiveRandomProp(player)
 			player.kv.solid = 6
 			player.kv.CollisionGroup = TRACE_COLLISION_GROUP_PLAYER
 			player.SetThirdPersonShoulderModeOn()
-			TakeAllWeapons(player)
+			player.TakeOffhandWeapon(OFFHAND_TACTICAL)
 			player.GiveOffhandWeapon("mp_ability_heal", OFFHAND_TACTICAL)
-			}
-			player.p.playerDamageDealt = 0.0
-			if (player.GetTeam() == TEAM_MILITIA){
-			Message(player, "FIND A SPOT TO HIDE", "                      Attackers coming in 30 seconds! \n\n Type 'prop' in console to change prop up to 3 times before attackers arrive.", 10) }
-			else if(player.GetTeam() == TEAM_IMC){
+			} else if(player.GetTeam() == TEAM_IMC){
 			Message(player, "PROPS ARE HIDING", "Teleporting in 30 seconds.", 10)}
 		}
 	}
@@ -1212,21 +1229,26 @@ foreach(player in GetPlayerArray())
 prophunt.cantUseChangeProp = true
 foreach(player in GetPlayerArray())
     {
+		        if(IsValidPlayer(player))
+        {
 if(player.GetTeam() == TEAM_IMC){
+					Inventory_SetPlayerEquipment(player, WHITE_SHIELD, "armor")
 					ClearInvincible(player)
 					player.SetOrigin(prophuntSpawns[RandomInt(4)].origin)
 					player.kv.solid = 6
 					player.kv.CollisionGroup = TRACE_COLLISION_GROUP_PLAYER
 					player.SetThirdPersonShoulderModeOff()
-					TakeAllWeapons(player)
 					string sec = GetCurrentPlaylistVarString("flowstatePROPHUNTweapon", "~~none~~")
+					player.TakeNormalWeaponByIndexNow( WEAPON_INVENTORY_SLOT_PRIMARY_0 )
+					player.TakeOffhandWeapon(OFFHAND_TACTICAL)
 					player.GiveWeapon( sec, WEAPON_INVENTORY_SLOT_PRIMARY_0, [] )
-					
+					player.GiveOffhandWeapon("mp_ability_heal", OFFHAND_TACTICAL)
 					//if a player punch a prop, they will crash. This is a workaround. Colombia
 					//player.GiveWeapon( "mp_weapon_melee_survival", WEAPON_INVENTORY_SLOT_PRIMARY_2, [] )
 					//player.GiveOffhandWeapon( "melee_data_knife", OFFHAND_MELEE, [] )
 					DeployAndEnableWeapons(player)
 			}
+	}
 	}
 
 while( Time() <= endTime )
@@ -1303,8 +1325,11 @@ foreach(player in GetPlayerArray())
 wait 5
 UpdatePlayerCounts()
 bubbleBoundary.Destroy()
+prophunt.InProgress = false
 foreach(player in GetPlayerArray())
-    {		
+    {	
+		TakeAllWeapons(player)
+		player.SetThirdPersonShoulderModeOn()
 		if(player.GetTeam() == TEAM_IMC){
 				player.Code_SetTeam( TEAM_MILITIA )
 				_HandleRespawnPROPHUNT(player)
@@ -1325,6 +1350,9 @@ WaitFrame()
 }
 
 void function GiveTeamToSpectator(entity player)
+///////////////////////////////////////////////////////
+//By Retículo Endoplasmático#5955 (CaféDeColombiaFPS)//
+///////////////////////////////////////////////////////
 {
 	array<entity> IMCplayers = GetPlayerArrayOfTeam(TEAM_IMC)
 	array<entity> MILITIAplayers = GetPlayerArrayOfTeam(TEAM_MILITIA)
