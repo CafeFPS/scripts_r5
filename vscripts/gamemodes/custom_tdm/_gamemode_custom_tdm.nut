@@ -2345,10 +2345,7 @@ foreach(player in GetPlayerArray())
 
 wait 5
 
-
-	if (FlowState_LockPOI()) {
-		file.nextMapIndex = FlowState_LockedPOI()
-	}else if (!file.mapIndexChanged)
+	if (!file.mapIndexChanged)
 		{
 			file.nextMapIndex = (file.nextMapIndex + 1 ) % file.locationSettings.len()
 			//surf will never be in normal playlist mode
@@ -2357,6 +2354,11 @@ wait 5
 			file.nextMapIndex = 0
 			}
 		}
+		
+	if (FlowState_LockPOI()) {
+		file.nextMapIndex = FlowState_LockedPOI()
+	}
+	
 	
 	if(FlowState_SURF()){
 	file.nextMapIndex = 12}
@@ -3057,7 +3059,7 @@ foreach(player in GetPlayerArray())
 
 	 if(IsValid(player))
         {
-		Message(player,"- CHAMPION DECIDED! -", "\n " + GetBestPlayerName() + " is the champion: number 1 in kills and damage \n with " + GetBestPlayerScore() + " kills and " + GetDamageOfPlayerWithMostDamage() + " of damage.  \n \n        Champion is literally on fire! Weapons disabled! Please tbag.", 10, "UI_InGame_ChampionVictory")
+		Message(player,"- CHAMPION DECIDED! -", "\n " + GetBestPlayerName() + " is the champion. " + GetBestPlayerScore() + " kills and " + GetDamageOfPlayerWithMostDamage() + " of damage.  \n \n        Champion is literally on fire! Weapons disabled! Please tbag.", 10, "UI_InGame_ChampionVictory")
 		}
 	}
 wait 1
@@ -3990,6 +3992,7 @@ if(player.GetPlayerName() == file.Hoster || player.GetPlayerName() == file.admin
             if (now == "now")
             {
                file.tdmState = eTDMState.NEXT_ROUND_NOW
+			   file.mapIndexChanged = false
             }
         } catch(e1) {}
 
