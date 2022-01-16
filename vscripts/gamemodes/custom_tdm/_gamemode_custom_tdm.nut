@@ -75,6 +75,8 @@ struct {
 	bool isshipalive = false
 	array<LocationSettings> droplocationSettings
     LocationSettings& dropselectedLocation
+		
+	bool FallTriggersEnabled = false
 } file
 
 struct PlayerInfo
@@ -179,6 +181,7 @@ if(!FlowState_PROPHUNT()){
 	thread RunTDM() 
 	} else {
 	thread RunPROPHUNT()
+	thread EmitSoundOnSprintingProp()
 	}//Go to Game Loop
     }
 
@@ -1074,7 +1077,7 @@ void function ActualPROPHUNTLobby()
 ///////////////////////////////////////////////////////
 {
 	SetGameState(eGameState.MapVoting)
-	
+	file.FallTriggersEnabled = true
 if (FlowState_LockPOI()) {
 	prophunt.nextMapIndex = FlowState_LockedPOI()
 }else if (!prophunt.mapIndexChanged)
@@ -1147,17 +1150,21 @@ void function EmitSoundOnSprintingProp()
 //By Retículo Endoplasmático#5955 (CaféDeColombiaFPS)//
 ///////////////////////////////////////////////////////
 {
-array<entity> MILITIAplayers = GetPlayerArrayOfTeam(TEAM_MILITIA)
-	while(prophunt.InProgress)
-	{
-		foreach(player in MILITIAplayers)
+	for(; ;)
+    {
+		while(prophunt.InProgress)
 		{
-			if(player.IsSprinting())
+		array<entity> MILITIAplayers = GetPlayerArrayOfTeam(TEAM_MILITIA)
+			foreach(player in MILITIAplayers)
 			{
-			EmitSoundOnEntity( player, "husaria_sprint_default_3p" )
-			} 
+				if(player.IsSprinting())
+				{
+				EmitSoundOnEntity( player, "husaria_sprint_default_3p" )
+				} 
+			}
+		wait 0.2
 		}
-	wait 0.2
+		wait 1
 	}
 }
 
@@ -1169,7 +1176,6 @@ void function ActualPROPHUNTGameLoop()
 entity bubbleBoundary = CreateBubbleBoundaryPROPHUNT(prophunt.selectedLocation)
 file.tdmState = eTDMState.IN_PROGRESS
 prophunt.InProgress = true
-thread EmitSoundOnSprintingProp()
 SetGameState(eGameState.Playing)
 
 float endTime = Time() + GetCurrentPlaylistVarFloat("flowstatePROPHUNTLimitTime", 300 )
@@ -1191,6 +1197,7 @@ playerNewTeam.Code_SetTeam( TEAM_IMC )
 
 		file.deathPlayersCounter = 0
 		prophunt.cantUseChangeProp = false
+		file.FallTriggersEnabled = false
 foreach(player in GetPlayerArray())
     {
         if(IsValidPlayer(player))
@@ -1952,28 +1959,29 @@ void function CreateShipRoomFallTriggers()
 			trigger.Destroy()
 		}
 	)
-
-	bool enabled = true
-
-	while ( enabled )
-	{
-		array<entity> touchingEnts = trigger.GetTouchingEntities()
-
-		foreach( touchingEnt in touchingEnts  )
+    for(; ;)
+    {
+		while ( file.FallTriggersEnabled )
 		{
-			if( touchingEnt.IsPlayer() )
+			array<entity> touchingEnts = trigger.GetTouchingEntities()
+
+			foreach( touchingEnt in touchingEnts  )
 			{
-				if (GetMapName() == "mp_rr_desertlands_64k_x_64k" || GetMapName() == "mp_rr_desertlands_64k_x_64k_nx")
+				if( touchingEnt.IsPlayer() )
 				{
-					touchingEnt.SetOrigin( <-19459, 2127, 6404> )
-				}
-				else if(GetMapName() == "mp_rr_canyonlands_mu1" || GetMapName() == "mp_rr_canyonlands_mu1_night" || GetMapName() == "mp_rr_canyonlands_64k_x_64k")
-				{
-					touchingEnt.SetOrigin( <-19459, 2127, 18404> )
+					if (GetMapName() == "mp_rr_desertlands_64k_x_64k" || GetMapName() == "mp_rr_desertlands_64k_x_64k_nx")
+					{
+						touchingEnt.SetOrigin( <-19459, 2127, 6404> )
+					}
+					else if(GetMapName() == "mp_rr_canyonlands_mu1" || GetMapName() == "mp_rr_canyonlands_mu1_night" || GetMapName() == "mp_rr_canyonlands_64k_x_64k")
+					{
+						touchingEnt.SetOrigin( <-19459, 2127, 18404> )
+					}
 				}
 			}
+			wait 0.01
 		}
-		wait 0.01
+		wait 1
 	}
 }
 
@@ -2370,6 +2378,7 @@ void function VotingPhase()
 {
     DestroyPlayerProps();
     SetGameState(eGameState.MapVoting)
+	file.FallTriggersEnabled = true
 	if (FlowState_RandomGuns() )
     {
         file.randomprimary = RandomIntRangeInclusive( 0, 15 )
@@ -2977,6 +2986,7 @@ foreach(player in GetPlayerArray())
 			} 
 		}
 	}
+file.FallTriggersEnabled = false
 try {file.supercooldropship.Destroy()}catch(e69){}
 ResetAllPlayerStats()
 file.bubbleBoundary = CreateBubbleBoundary(file.selectedLocation)
