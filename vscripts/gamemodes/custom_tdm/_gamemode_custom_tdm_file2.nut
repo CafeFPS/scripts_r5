@@ -437,9 +437,6 @@ void function PrecacheCustomMapsProps()
 {
 if(GetMapName() == "mp_rr_desertlands_64k_x_64k" || GetMapName() == "mp_rr_desertlands_64k_x_64k_nx"){	
 CreateAnimatedLegend($"mdl/humans/class/light/pilot_light_wraith.rmdl",<8443, 4459, -4293>,<0, 0, 0>, 0, 2)
-CreateAnimatedLegend($"mdl/humans/class/light/pilot_light_support.rmdl",<11238, 4238,-4293>,<0, -90, 0>, 0, 2)
-CreateAnimatedLegend($"mdl/humans/class/heavy/pilot_heavy_pathfinder.rmdl",<12099, 6976,-4350>,<0, -90, 0>,  0, 2)
-CreateAnimatedLegend($"mdl/humans/class/light/pilot_light_support.rmdl", <-19715,1573,6480>, <0,77,0>)
 
 //surf
 PrecacheModel( $"mdl/robots/marvin/marvin_gladcard.rmdl" )

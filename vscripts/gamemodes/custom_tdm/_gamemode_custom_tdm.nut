@@ -101,6 +101,33 @@ bool cantUseChangeProp = false
 bool InProgress = false
 } prophunt
 
+const array<asset> prophuntAssetsWE =
+[
+	$"mdl/industrial/traffic_cone_01.rmdl",
+	$"mdl/barriers/concrete/concrete_barrier_01.rmdl",
+	$"mdl/eden/eden_electrical_transformer_01.rmdl",
+	$"mdl/vehicles_r5/land/msc_truck_samson_v2/veh_land_msc_truck_samson_v2.rmdl",
+	$"mdl/rocks/rock_lava_small_moss_desertlands_03.rmdl",
+	$"mdl/barriers/concrete/concrete_barrier_fence_tarp_128.rmdl",
+	$"mdl/angel_city/vending_machine.rmdl",
+	$"mdl/utilities/power_gen1.rmdl",
+	$"mdl/angel_city/box_small_02.rmdl",
+	$"mdl/colony/antenna_05_colony.rmdl",
+	$"mdl/robots/marvin/marvin_gladcard.rmdl",
+	$"mdl/garbage/garbage_bag_plastic_a.rmdl",
+	$"mdl/garbage/trash_bin_single_wtrash_Blue.rmdl",
+	$"mdl/angel_city/box_small_01.rmdl",
+	$"mdl/garbage/dumpster_dirty_open_a_02.rmdl",
+	$"mdl/containers/slumcity_oxygen_tank_red.rmdl",
+	$"mdl/containers/box_shrinkwrapped.rmdl",
+	$"mdl/colony/farmland_fridge_01.rmdl",
+	$"mdl/furniture/chair_beanbag_01.rmdl",
+	$"mdl/colony/farmland_crate_plastic_01_red.rmdl",
+	$"mdl/IMC_base/generator_IMC_01.rmdl",
+	$"mdl/garbage/trash_can_metal_02_b.rmdl",
+	$"mdl/garbage/trash_bin_single_wtrash.rmdl"
+]
+
 // ██████   █████  ███████ ███████     ███████ ██    ██ ███    ██  ██████ ████████ ██  ██████  ███    ██ ███████
 // ██   ██ ██   ██ ██      ██          ██      ██    ██ ████   ██ ██         ██    ██ ██    ██ ████   ██ ██
 // ██████  ███████ ███████ █████       █████   ██    ██ ██ ██  ██ ██         ██    ██ ██    ██ ██ ██  ██ ███████
@@ -703,107 +730,15 @@ void function _HandleRespawn(entity player)
 
 
 void function PROPHUNT_GiveRandomProp(entity player)
+///////////////////////////////////////////////////////
+//By Retículo Endoplasmático#5955 (CaféDeColombiaFPS)//
+///////////////////////////////////////////////////////
 {
     if (GetMapName() == "mp_rr_desertlands_64k_x_64k" || GetMapName() == "mp_rr_desertlands_64k_x_64k_nx")
 	{
-		
-	switch(RandomInt(22))
-    {
-		
-					case 0:
-            player.SetBodyModelOverride( $"mdl/industrial/traffic_cone_01.rmdl" )
-			player.SetArmsModelOverride( $"mdl/industrial/traffic_cone_01.rmdl" )
-            break;
-					case 1:
-            player.SetBodyModelOverride( $"mdl/barriers/concrete/concrete_barrier_01.rmdl" )
-			player.SetArmsModelOverride( $"mdl/barriers/concrete/concrete_barrier_01.rmdl" )
-            break;
-					case 2:
-            player.SetBodyModelOverride( $"mdl/eden/eden_electrical_transformer_01.rmdl" )
-			player.SetArmsModelOverride( $"mdl/eden/eden_electrical_transformer_01.rmdl" )
-            break;
-					case 3:
-            player.SetBodyModelOverride( $"mdl/vehicles_r5/land/msc_truck_samson_v2/veh_land_msc_truck_samson_v2.rmdl" )
-			player.SetArmsModelOverride( $"mdl/vehicles_r5/land/msc_truck_samson_v2/veh_land_msc_truck_samson_v2.rmdl" )
-            break;
-					case 4:
-            player.SetBodyModelOverride( $"mdl/rocks/rock_lava_small_moss_desertlands_03.rmdl" )
-			player.SetArmsModelOverride( $"mdl/rocks/rock_lava_small_moss_desertlands_03.rmdl" )
-            break;
-					case 5:
-            player.SetBodyModelOverride( $"mdl/barriers/concrete/concrete_barrier_fence_tarp_128.rmdl" )
-			player.SetArmsModelOverride( $"mdl/barriers/concrete/concrete_barrier_fence_tarp_128.rmdl" )
-            break;
-					case 6:
-            player.SetBodyModelOverride( $"mdl/angel_city/vending_machine.rmdl" )
-			player.SetArmsModelOverride( $"mdl/angel_city/vending_machine.rmdl" )
-            break;
-					case 7:
-            player.SetBodyModelOverride( $"mdl/utilities/power_gen1.rmdl" )
-			player.SetArmsModelOverride( $"mdl/utilities/power_gen1.rmdl" )
-            break;
-					case 8:
-            player.SetBodyModelOverride( $"mdl/angel_city/box_small_02.rmdl" )
-			player.SetArmsModelOverride( $"mdl/angel_city/box_small_02.rmdl" )
-            break;
-					case 9:
-            player.SetBodyModelOverride( $"mdl/colony/antenna_05_colony.rmdl" )
-			player.SetArmsModelOverride( $"mdl/colony/antenna_05_colony.rmdl" )
-            break;
-					case 10:
-            player.SetBodyModelOverride( $"mdl/robots/marvin/marvin_gladcard.rmdl" )
-			player.SetArmsModelOverride( $"mdl/robots/marvin/marvin_gladcard.rmdl" )
-            break;
-					case 11:
-            player.SetBodyModelOverride( $"mdl/garbage/garbage_bag_plastic_a.rmdl" )
-			player.SetArmsModelOverride( $"mdl/garbage/garbage_bag_plastic_a.rmdl" )
-            break;
-					case 12:
-            player.SetBodyModelOverride( $"mdl/garbage/trash_bin_single_wtrash_Blue.rmdl" )
-			player.SetArmsModelOverride( $"mdl/garbage/trash_bin_single_wtrash_Blue.rmdl" )
-            break;
-					case 13:
-            player.SetBodyModelOverride( $"mdl/angel_city/box_small_01.rmdl" )
-			player.SetArmsModelOverride( $"mdl/angel_city/box_small_01.rmdl" )
-            break;
-					case 14:
-            player.SetBodyModelOverride( $"mdl/garbage/dumpster_dirty_open_a_02.rmdl" )
-			player.SetArmsModelOverride( $"mdl/garbage/dumpster_dirty_open_a_02.rmdl" )
-            break;
-					case 15:
-            player.SetBodyModelOverride( $"mdl/containers/slumcity_oxygen_tank_red.rmdl" )
-			player.SetArmsModelOverride( $"mdl/containers/slumcity_oxygen_tank_red.rmdl" )
-            break;
-					case 16:
-            player.SetBodyModelOverride( $"mdl/containers/box_shrinkwrapped.rmdl" )
-			player.SetArmsModelOverride( $"mdl/containers/box_shrinkwrapped.rmdl" )
-            break;
-					case 17:
-            player.SetBodyModelOverride( $"mdl/colony/farmland_fridge_01.rmdl" )
-			player.SetArmsModelOverride( $"mdl/colony/farmland_fridge_01.rmdl" )
-            break;
-					case 18:
-            player.SetBodyModelOverride( $"mdl/furniture/chair_beanbag_01.rmdl" )
-			player.SetArmsModelOverride( $"mdl/furniture/chair_beanbag_01.rmdl" )
-            break;
-					case 19:
-            player.SetBodyModelOverride( $"mdl/colony/farmland_crate_plastic_01_red.rmdl" )
-			player.SetArmsModelOverride( $"mdl/colony/farmland_crate_plastic_01_red.rmdl" )
-            break;
-					case 20:
-            player.SetBodyModelOverride( $"mdl/IMC_base/generator_IMC_01.rmdl" )
-			player.SetArmsModelOverride( $"mdl/IMC_base/generator_IMC_01.rmdl" )
-            break;
-					case 21:
-            player.SetBodyModelOverride( $"mdl/garbage/trash_can_metal_02_b.rmdl" )
-			player.SetArmsModelOverride( $"mdl/garbage/trash_can_metal_02_b.rmdl" )
-            break;
-					case 22:
-            player.SetBodyModelOverride( $"mdl/garbage/trash_bin_single_wtrash.rmdl" )
-			player.SetArmsModelOverride( $"mdl/garbage/trash_bin_single_wtrash.rmdl" )
-            break;
-    }
-	
+	asset selectedModel = prophuntAssetsWE[RandomIntRangeInclusive(0,(prophuntAssetsWE.len()-1))]
+	player.SetBodyModelOverride( selectedModel )
+	player.SetArmsModelOverride( selectedModel )
 	}
 }
 
@@ -819,7 +754,6 @@ void function _OnPlayerConnectedPROPHUNT(entity player)
 	array<entity> MILITIAplayers = GetPlayerArrayOfTeam(TEAM_MILITIA)
 	array<entity> playersON = GetPlayerArray_Alive()
 
-	
 	switch(GetGameState())
     {
 		case eGameState.WaitingForPlayers:
@@ -4229,7 +4163,6 @@ void function AnimationTiming( entity legend, float cycle )
 		legend.SetCycle( cycle )
 		legend.Anim_Play( animationStrings[RandomInt(animationStrings.len())] )
 		WaittillAnimDone(legend)
-		wait 1
 	}
 }
 
