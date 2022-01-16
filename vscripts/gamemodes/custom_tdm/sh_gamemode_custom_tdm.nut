@@ -992,10 +992,10 @@ case "mp_rr_canyonlands_64k_x_64k":
                 NewLocationSettings(
                     "TTV Building",
                     [
-                        NewLocPair(<9732, 4942, -4167>, <0, 90, 0>),
-                        NewLocPair(<9216,5568,-3520>, <0, -120, 0>),
-                        NewLocPair(<9920,5312,-4096>, <0, -45, 0>),
-                        NewLocPair(<9728,5184,-3776>, <0, -135, 0>)
+                        NewLocPair(<8779, 5154, -4092>, <0, 90, 0>),
+                        NewLocPair(<9351,6319,-4095>, <0, -120, 0>),
+                        NewLocPair(<10462,6128,-4163>, <0, -45, 0>),
+                        NewLocPair(<9635,4868,-4073>, <0, -135, 0>)
                     ],
                     <0, 0, 3000>
                 )
