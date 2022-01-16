@@ -859,10 +859,14 @@ void function _OnPlayerConnectedPROPHUNT(entity player)
 				else if(GetMapName() == "mp_rr_canyonlands_mu1" || GetMapName() == "mp_rr_canyonlands_mu1_night" || GetMapName() == "mp_rr_canyonlands_64k_x_64k")
 					{
 					player.SetOrigin(<-19459, 2127, 18404>)}
+				player.kv.solid = 6
+				player.kv.CollisionGroup = TRACE_COLLISION_GROUP_PLAYER
+				player.AllowMantle()
 				player.SetThirdPersonShoulderModeOn()
 				player.UnforceStand()
 				player.UnfreezeControlsOnServer()
-				MakeInvincible(player)
+				TakeAllWeapons(player)
+				
 			}
 			break
 		case eGameState.MapVoting:
@@ -899,10 +903,13 @@ void function _OnPlayerConnectedPROPHUNT(entity player)
 				else if(GetMapName() == "mp_rr_canyonlands_mu1" || GetMapName() == "mp_rr_canyonlands_mu1_night" || GetMapName() == "mp_rr_canyonlands_64k_x_64k")
 					{
 					player.SetOrigin(<-19459, 2127, 18404>)}
+				player.kv.solid = 6
+				player.kv.CollisionGroup = TRACE_COLLISION_GROUP_PLAYER
+				player.AllowMantle()	
 				player.SetThirdPersonShoulderModeOn()
 				player.UnforceStand()
 				player.UnfreezeControlsOnServer()
-				MakeInvincible(player)
+				TakeAllWeapons(player)
 			}
 			break
 		case eGameState.Playing: //wait round ends, set new player to spectate random player
@@ -922,13 +929,17 @@ void function _OnPlayerConnectedPROPHUNT(entity player)
 				player.SetPlayerNetBool( "pingEnabled", true )
 				player.SetHealth( 100 )
 				player.SetOrigin(prophuntSpawns[RandomInt(4)].origin)
-				player.MakeInvisible()
+				player.kv.solid = 6
+				player.kv.CollisionGroup = TRACE_COLLISION_GROUP_PLAYER
+				player.AllowMantle()
+				TakeAllWeapons(player)
 				Message(player, "APEX PROPHUNT", "Game is in progress. You'll spawn in the next round. \n ", 10)
 				player.Code_SetTeam( 20 )
-				player.SetObserverTarget( playersON[RandomInt(playersON.len())] )
+				player.SetObserverTarget( playersON[RandomInt(playersON.len()-1)] )
 				player.SetSpecReplayDelay( 2 )
                 player.StartObserverMode( OBS_MODE_IN_EYE )
 				Remote_CallFunction_NonReplay(player, "ServerCallback_KillReplayHud_Activate")
+				player.MakeInvisible()
 				}catch(e){}
 			}
 			break
@@ -988,10 +999,8 @@ void function _OnPlayerDiedPROPHUNT(entity victim, entity attacker, var damageIn
             try{
 			if(IsValid(attacker) && attacker.IsPlayer() && IsAlive(attacker) && attacker != victim)
             {
-			if(FlowState_KillshotEnabled()){
 			DamageInfo_AddCustomDamageType( damageInfo, DF_KILLSHOT )
-			thread EmitSoundOnEntityOnlyToPlayer( attacker, attacker, "flesh_bulletimpact_downedshot_1p_vs_3p" )
-			}		
+			thread EmitSoundOnEntityOnlyToPlayer( attacker, attacker, "flesh_bulletimpact_downedshot_1p_vs_3p" )		
 			//Autoreload on kill without animation //By CaféDeColombiaFPS
             WpnAutoReloadOnKill(attacker)
 			int score = GameRules_GetTeamScore(TEAM_IMC);
@@ -1029,7 +1038,6 @@ void function _HandleRespawnPROPHUNT(entity player,bool isTPtofightprops = false
 	
 	if(IsValid( player ))
 			{
-				
 				if(FlowState_ForceCharacter()){CharSelect(player)}
 				if(!IsAlive(player)) {DoRespawnPlayer( player, null )}
 				
@@ -1038,19 +1046,16 @@ void function _HandleRespawnPROPHUNT(entity player,bool isTPtofightprops = false
 					player.SetOrigin(<-19459, 2127, 6404>)}
 				else if(GetMapName() == "mp_rr_canyonlands_mu1" || GetMapName() == "mp_rr_canyonlands_mu1_night" || GetMapName() == "mp_rr_canyonlands_64k_x_64k")
 					{
-					player.SetOrigin(<-19459, 2127, 18404>)}
-				ClearInvincible(player)			
+					player.SetOrigin(<-19459, 2127, 18404>)}		
 				player.SetThirdPersonShoulderModeOn()
-				TakeAllWeapons(player)
 				Survival_SetInventoryEnabled( player, true )
 				GiveLoadoutRelatedWeapons(player)
+				Inventory_SetPlayerEquipment(player, WHITE_SHIELD, "armor")
 				player.SetPlayerNetInt( "respawnStatus", eRespawnStatus.NONE )
 				player.SetPlayerNetBool( "pingEnabled", true )
 				player.SetHealth( 100 )
 				TakeAllWeapons(player)
-				player.kv.solid = 6
-				player.kv.CollisionGroup = TRACE_COLLISION_GROUP_PLAYER	
-				player.AllowMantle()
+				ClearInvincible(player)
 			}
 
 	} catch (e) {}
@@ -1155,15 +1160,16 @@ float endTime = Time() + GetCurrentPlaylistVarFloat("flowstatePROPHUNTLimitTime"
 array<LocPair> prophuntSpawns = prophunt.selectedLocation.spawns
 
 //this is for debuggin, so I can changelevel and still have enemy(two instances of the game)
-if (IMCplayers.len() == 2 && MILITIAplayers.len() == 0)
+if (IMCplayers.len() == 2 && MILITIAplayers.len() == 0 && GetCurrentPlaylistVarBool("flowstatePROPHUNTDebug", false ))
 {
 entity playerNewTeam = IMCplayers[0]
 playerNewTeam.Code_SetTeam( TEAM_MILITIA )
-} else if (IMCplayers.len() == 0 && MILITIAplayers.len() == 2)
+} else if (IMCplayers.len() == 0 && MILITIAplayers.len() == 2 && GetCurrentPlaylistVarBool("flowstatePROPHUNTDebug", false ))
 {
 entity playerNewTeam = MILITIAplayers[0]
 playerNewTeam.Code_SetTeam( TEAM_IMC )	
 }
+
 		file.deathPlayersCounter = 0
 		prophunt.cantUseChangeProp = false
 foreach(player in GetPlayerArray())
@@ -1216,10 +1222,9 @@ if(player.GetTeam() == TEAM_IMC){
 					//player.GiveWeapon( "mp_weapon_melee_survival", WEAPON_INVENTORY_SLOT_PRIMARY_2, [] )
 					//player.GiveOffhandWeapon( "melee_data_knife", OFFHAND_MELEE, [] )
 					DeployAndEnableWeapons(player)
-					WpnPulloutOnRespawn(player)
 			}
 	}
-if (FlowState_Timer()){
+
 while( Time() <= endTime )
 	{
 		if(Time() == endTime-120)
@@ -1268,18 +1273,10 @@ while( Time() <= endTime )
 		}
 		if(file.tdmState == eTDMState.NEXT_ROUND_NOW)
 		{break}
-		wait 0.2
+		wait 0.01
 		WaitFrame()	
 	}
-}else{
-while( Time() <= endTime )
-	{
-		if(file.tdmState == eTDMState.NEXT_ROUND_NOW)
-		{break}
-		wait 0.2
-		WaitFrame()
-	}
-}
+
 array<entity> MILITIAplayersAlive = GetPlayerArrayOfTeam_Alive(TEAM_MILITIA)	
 if(MILITIAplayersAlive.len() > 0){
 foreach(player in GetPlayerArray())
@@ -1301,10 +1298,10 @@ foreach(player in GetPlayerArray())
 		}
 wait 5
 UpdatePlayerCounts()
+bubbleBoundary.Destroy()
 foreach(player in GetPlayerArray())
     {		
 		if(player.GetTeam() == TEAM_IMC){
-				TakeAllWeapons(player)
 				player.Code_SetTeam( TEAM_MILITIA )
 				_HandleRespawnPROPHUNT(player)
 		} else if(player.GetTeam() == TEAM_MILITIA){
@@ -1316,7 +1313,6 @@ foreach(player in GetPlayerArray())
 			player.MakeVisible()
 			player.UnforceStand()
 			player.UnfreezeControlsOnServer()
-			DoRespawnPlayer(player,null)
 			GiveTeamToSpectator(player) //give team to player connected midgame
 			_HandleRespawnPROPHUNT(player)
 		}
@@ -1335,9 +1331,8 @@ void function GiveTeamToSpectator(entity player)
 	} else if (MILITIAplayers.len() > IMCplayers.len())
 	{
 	player.Code_SetTeam( TEAM_IMC )	
-	} else if (IMCplayers.len() == MILITIAplayers.len())
-	{
-		switch(RandomInt(1))
+	} else {
+		switch(RandomIntRangeInclusive(0,1))
 		{
 			case 0:
 				player.Code_SetTeam( TEAM_IMC )
@@ -4186,8 +4181,8 @@ void function AnimationTiming( entity legend, float cycle )
 		legend.SetCycle( cycle )
 		legend.Anim_Play( animationStrings[RandomInt(animationStrings.len())] )
 		WaittillAnimDone(legend)
+		wait 1
 	}
-	WaitForever()
 }
 
 void function CreateAnimatedLegend(asset a, vector pos, vector ang , int solidtype = 0, float size = 1.0)  // solidtype 0 = no collision, 2 = bounding box, 6 = use vPhysics, 8 = hitboxes only
