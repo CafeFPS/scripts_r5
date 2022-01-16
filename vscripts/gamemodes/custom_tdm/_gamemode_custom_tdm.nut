@@ -330,7 +330,6 @@ void function _OnPlayerConnected(entity player)
 {
     if(!IsValid(player)) return
     GivePassive(player, ePassives.PAS_PILOT_BLOOD)
-
 	string nextlocation = file.selectedLocation.name
 			if(FlowState_RandomGunsEverydie())
 			{
@@ -393,24 +392,21 @@ void function _OnPlayerConnected(entity player)
 			if(FlowState_Gungame()){
 				KillStreakAnnouncer(player, true)
 			}
-			    if(!IsAlive(player))
+	
+			if(GetCurrentPlaylistVarBool("flowstateDroppodsOnPlayerConnected", false ) && file.selectedLocation.name != "Surf Purgatory" || GetCurrentPlaylistVarBool("flowstateDroppodsOnPlayerConnected", false ) && file.selectedLocation.name != "Skill trainer By Colombia")
 			{
+				player.SetPlayerGameStat( PGS_ASSAULT_SCORE, 2) //Using gamestat as bool lmao. 
+				thread AirDropFireteam( shuffledspawnes[spawni] + <0,0,15000>, <0,180,0>, "idle", 0, "droppod_fireteam", player )
 				_HandleRespawn(player, true)
-				
+				player.SetAngles( <0,180,0> )
+				printl("player spawning in droppod")
+			} else {
+			_HandleRespawn(player)				
+			}
+
 			if(file.selectedLocation.name != "Surf Purgatory"){
 					ClearInvincible(player)
 				}
-			thread GrantSpawnImmunity (player, 4)	
-			}
-
-			if(GetCurrentPlaylistVarBool("flowstateDroppodsOnPlayerConnected", false ) && file.selectedLocation.name != "Surf Purgatory" || GetCurrentPlaylistVarBool("flowstateDroppodsOnPlayerConnected", false ) && file.selectedLocation.name != "Skill trainer By Colombia")
-			{
-
-				thread AirDropFireteam( shuffledspawnes[spawni] + <0,0,15000>, <0,180,0>, "idle", 0, "droppod_fireteam", player )
-				printl("player spawning in droppod")
-			} else { 
-			TpPlayerToSpawnPoint(player)
-			}
 
         	Remote_CallFunction_NonReplay(player, "ServerCallback_TDM_DoAnnouncement", 1, eTDMAnnounce.ROUND_START)
 			try{
@@ -3183,8 +3179,9 @@ void function MonitorBubbleBoundary(entity bubbleShield, vector bubbleCenter, fl
     {
         foreach(player in GetPlayerArray_Alive())
         {
+			
             if(!IsValid(player)) continue
-            if(Distance(player.GetOrigin(), bubbleCenter) > bubbleRadius)
+            if(Distance(player.GetOrigin(), bubbleCenter) > bubbleRadius && player.GetPlayerGameStat( PGS_ASSAULT_SCORE ) != 2)
             {
 				Remote_CallFunction_Replay( player, "ServerCallback_PlayerTookDamage", 0, 0, 0, 0, DF_BYPASS_SHIELD | DF_DOOMED_HEALTH_LOSS, eDamageSourceId.deathField, null )
                 player.TakeDamage( int( Deathmatch_GetOOBDamagePercent() / 100 * float( player.GetMaxHealth() ) ), null, null, { scriptType = DF_BYPASS_SHIELD | DF_DOOMED_HEALTH_LOSS, damageSourceId = eDamageSourceId.deathField } )
