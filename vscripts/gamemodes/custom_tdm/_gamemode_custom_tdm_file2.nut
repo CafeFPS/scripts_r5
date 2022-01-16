@@ -458,6 +458,7 @@ PrecacheModel( $"mdl/lamps/halogen_light_ceiling.rmdl" )
 PrecacheModel( $"mdl/utilities/halogen_lightbulb_case.rmdl" )
 PrecacheModel( $"mdl/utilities/halogen_lightbulbs.rmdl" )
 //skill trainer
+PrecacheModel( $"mdl/eden/eden_electrical_transformer_01.rmdl")
 PrecacheModel( $"mdl/lamps/warning_light_ON_red.rmdl" )
 PrecacheModel( $"mdl/desertlands/construction_bldg_platform_01.rmdl" )
 PrecacheModel( $"mdl/desertlands/construction_bldg_platform_02.rmdl" )

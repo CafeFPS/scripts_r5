@@ -754,24 +754,24 @@ void function PROPHUNT_GiveRandomProp(entity player)
 			player.SetArmsModelOverride( $"mdl/colony/antenna_05_colony.rmdl" )
             break;
 					case 10:
-            player.SetBodyModelOverride( $"mdl/pipes/pipe_modular_painted_grey_45_angle.rmdl" )
-			player.SetArmsModelOverride( $"mdl/pipes/pipe_modular_painted_grey_45_angle.rmdl" )
+            player.SetBodyModelOverride( $"mdl/robots/marvin/marvin_gladcard.rmdl" )
+			player.SetArmsModelOverride( $"mdl/robots/marvin/marvin_gladcard.rmdl" )
             break;
 					case 11:
             player.SetBodyModelOverride( $"mdl/garbage/garbage_bag_plastic_a.rmdl" )
 			player.SetArmsModelOverride( $"mdl/garbage/garbage_bag_plastic_a.rmdl" )
             break;
 					case 12:
-            player.SetBodyModelOverride( $"mdl/vehicles_r5/land/msc_suv_partum/veh_land_msc_suv_partum_static.rmdl" )
-			player.SetArmsModelOverride( $"mdl/vehicles_r5/land/msc_suv_partum/veh_land_msc_suv_partum_static.rmdl" )
+            player.SetBodyModelOverride( $"mdl/garbage/trash_bin_single_wtrash_Blue.rmdl" )
+			player.SetArmsModelOverride( $"mdl/garbage/trash_bin_single_wtrash_Blue.rmdl" )
             break;
 					case 13:
             player.SetBodyModelOverride( $"mdl/angel_city/box_small_01.rmdl" )
 			player.SetArmsModelOverride( $"mdl/angel_city/box_small_01.rmdl" )
             break;
 					case 14:
-            player.SetBodyModelOverride( $"mdl/vehicles_r5/land/msc_suv_partum/veh_land_msc_suv_partum_static.rmdl" )
-			player.SetArmsModelOverride( $"mdl/vehicles_r5/land/msc_suv_partum/veh_land_msc_suv_partum_static.rmdl" )
+            player.SetBodyModelOverride( $"mdl/garbage/dumpster_dirty_open_a_02.rmdl" )
+			player.SetArmsModelOverride( $"mdl/garbage/dumpster_dirty_open_a_02.rmdl" )
             break;
 					case 15:
             player.SetBodyModelOverride( $"mdl/containers/slumcity_oxygen_tank_red.rmdl" )
@@ -1212,7 +1212,13 @@ foreach(player in GetPlayerArray())
 			Message(player, "PROPS ARE HIDING", "Teleporting in 30 seconds.", 10)}
 		}
 	}
-wait 30
+wait 25
+foreach(player in GetPlayerArray())
+    {
+if(player.GetTeam() == TEAM_IMC){
+ScreenFadeToBlackForever(player)}
+	}
+wait 5
 foreach(player in GetPlayerArray())
     {
         if(IsValidPlayer(player))
@@ -1220,8 +1226,9 @@ foreach(player in GetPlayerArray())
 		if (player.GetTeam() == TEAM_MILITIA){
 			Message(player, "ATTENTION", "The attackers have arrived.", 5) }
 			else if (player.GetTeam() == TEAM_IMC){
+			ScreenFadeFromBlack(player)
 			array<entity> MILITIAplayersAlive = GetPlayerArrayOfTeam_Alive(TEAM_MILITIA)
-			Message(player, "ATTENTION", "Kill the props. Props alive: " + MILITIAplayersAlive.len(), 5)
+			Message(player, "ATTENTION", "Kill the props. Props alive: " + MILITIAplayersAlive.len(), 10)
 			}				
 		}
 		
@@ -3339,6 +3346,10 @@ player.TakeOffhandWeapon( OFFHAND_MELEE )
 player.TakeOffhandWeapon( WEAPON_INVENTORY_SLOT_PRIMARY_2 )
 player.GiveWeapon( "mp_weapon_melee_survival", WEAPON_INVENTORY_SLOT_PRIMARY_2, [] )
 player.GiveOffhandWeapon( "melee_data_knife", OFFHAND_MELEE, [] )
+if(FlowState_PROPHUNT())
+{
+TakeAllWeapons(player)
+}
 }
 
 // ███████  ██████  ██████  ██████  ███████ ██████   ██████   █████  ██████  ██████
