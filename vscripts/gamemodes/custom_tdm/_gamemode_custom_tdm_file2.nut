@@ -94,7 +94,7 @@ array<vector> function GetNewFFADropShipLocations(string locationname, string ma
         switch (locationname)
         {
             case "Hillside Outspot":
-                dropshiplocations.append(< <-20579, 6322, 2912> > )
+                dropshiplocations.append(< -20579, 6322, 2912 > )
                 dropshiplocations.append(< -18633, -1146, 3320 > )
                 dropshiplocations.append(< -22921, 3307, 3144 > )
                 dropshiplocations.append(< -19026, 3749, 4460 > )
