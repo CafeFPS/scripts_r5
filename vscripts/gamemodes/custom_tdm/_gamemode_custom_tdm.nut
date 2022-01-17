@@ -329,6 +329,8 @@ void function _OnPlayerConnected(entity player)
 ///////////////////////////////////////////////////////
 {
     if(!IsValid(player)) return
+			if(FlowState_ForceCharacter()){
+				CharSelect(player)}
     GivePassive(player, ePassives.PAS_PILOT_BLOOD)
 	string nextlocation = file.selectedLocation.name
 			if(FlowState_RandomGunsEverydie())
@@ -355,7 +357,6 @@ void function _OnPlayerConnected(entity player)
 				}
 			}
 			player.SetThirdPersonShoulderModeOn()
-			HolsterAndDisableWeapons( player )
 						if(FlowState_RandomGunsEverydie()){
 			UpgradeShields(player, true)
 			}
@@ -374,9 +375,7 @@ void function _OnPlayerConnected(entity player)
 				ClearInvincible(player)
 			}
 		}
-        player.UnfreezeControlsOnServer();
-		if(FlowState_ForceCharacter()){
-				CharSelect(player)}
+        player.UnfreezeControlsOnServer()
         break
     case eGameState.Playing:
 	    if(IsValidPlayer(player))
@@ -3996,11 +3995,6 @@ bool function ClientCommand_NextRound(entity player, array<string> args)
 if(player.GetPlayerName() == file.Hoster || player.GetPlayerName() == file.admin1 || player.GetPlayerName() == file.admin2 || player.GetPlayerName() == file.admin3 || player.GetPlayerName() == file.admin4) {
 	
     if (args.len()) {
-        try{
-            int mapIndex = int(args[0])
-            file.nextMapIndex = (((mapIndex >= 0 ) && (mapIndex < file.locationSettings.len())) ? mapIndex : RandomIntRangeInclusive(0, file.locationSettings.len() - 1))
-            file.mapIndexChanged = true
-        } catch (e) {}
 
         try{
             string now = args[0]
@@ -4008,8 +4002,15 @@ if(player.GetPlayerName() == file.Hoster || player.GetPlayerName() == file.admin
             {
                file.tdmState = eTDMState.NEXT_ROUND_NOW
 			   file.mapIndexChanged = false
+			   return true
             }
         } catch(e1) {}
+
+        try{
+            int mapIndex = int(args[0])
+            file.nextMapIndex = (((mapIndex >= 0 ) && (mapIndex < file.locationSettings.len())) ? mapIndex : RandomIntRangeInclusive(0, file.locationSettings.len() - 1))
+            file.mapIndexChanged = true
+        } catch (e) {}
 
         try{
             string now = args[1]
