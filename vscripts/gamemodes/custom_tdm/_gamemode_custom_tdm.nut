@@ -1164,18 +1164,17 @@ wait 25
 foreach(player in GetPlayerArray())
     {
 if(player.GetTeam() == TEAM_IMC){
-ScreenFadeToBlackForever(player)}
+ScreenFade( player, 0, 0, 0, 255, 4.0, 4.0, FFADE_OUT | FFADE_PURGE )}
 	}
-wait 5
+wait 4
 file.FallTriggersEnabled = false
 foreach(player in GetPlayerArray())
     {
         if(IsValidPlayer(player))
         {
 		if (player.GetTeam() == TEAM_MILITIA){
-			Message(player, "ATTENTION", "The attackers have arrived.", 5) }
+			Message(player, "ATTENTION", "The attackers have arrived.", 10) }
 			else if (player.GetTeam() == TEAM_IMC){
-			ScreenFadeFromBlack(player)
 			array<entity> MILITIAplayersAlive = GetPlayerArrayOfTeam_Alive(TEAM_MILITIA)
 			Message(player, "ATTENTION", "Kill the props. Props alive: " + MILITIAplayersAlive.len(), 10)
 			}				
@@ -2384,20 +2383,20 @@ file.dropselectedLocation = file.droplocationSettings[choice]
 
 if(file.selectedLocation.name == "TTV Building" && FlowState_ExtrashieldsEnabled()){
 	DestroyPlayerProps()
-	thread CreateGroundMedKit(<10725, 5913,-4225>)
+	CreateGroundMedKit(<10725, 5913,-4225>)
 } else if(file.selectedLocation.name == "Skill trainer By Colombia"){
     DestroyPlayerProps()
-    wait 2
-	thread CreateGroundMedKit(<17247,31823,-310>)
+    wait 1
+	CreateGroundMedKit(<17247,31823,-310>)
     SkillTrainerLoad()
 } else if(file.selectedLocation.name == "Surf Purgatory"){
 	file.surfEnded = false
 	DestroyPlayerProps()
-    wait 2
+    wait 1
     SurfPurgatoryLoad()
 } else if(file.selectedLocation.name == "Gaunlet"){
 	DestroyPlayerProps()
-	thread CreateGroundMedKit(<-21289, -12030, 3060>)
+	CreateGroundMedKit(<-21289, -12030, 3060>)
 	}
 
 //TODO MORE POIS

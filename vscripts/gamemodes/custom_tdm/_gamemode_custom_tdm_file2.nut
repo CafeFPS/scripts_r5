@@ -370,9 +370,6 @@ void function CreateGroundMedKit(vector pos)
         fx_children.append(trailFXHandle)
     }
     EmitSoundOnEntity( medkit_model, $"survival_loot_pickup_Medkit_3P" )
-    wait 2
-    StopSoundOnEntity( medkit_model, $"survival_loot_pickup_Medkit_3P" )
-
     entity medkit_proxy = CreateEntity( "trigger_cylinder" )
     medkit_proxy.SetRadius( 50 );medkit_proxy.SetAboveHeight( 60 );medkit_proxy.SetBelowHeight( 0 );medkit_proxy.SetOrigin( pos )
     DispatchSpawn( medkit_proxy )
@@ -421,9 +418,8 @@ void function MedKitHeal( entity medkit_proxy , entity medkit_model,vector pos)
 void function OnMedkitPickup(entity medkit_proxy , entity medkit_model,vector pos)
 {
     medkit_proxy.WaitSignal( "OnDestroy" )
+	try {medkit_model.Destroy()}catch(e69){}
     wait FlowState_ExtrashieldsSpawntime()
-    try {medkit_model.Destroy()}catch(e69){}
-	wait 1
     CreateGroundMedKit( pos )
 		foreach(sPlayer in GetPlayerArray()){
 		Message(sPlayer, "EXTRA SHIELD AVAILABLE!", "", 4, "")
