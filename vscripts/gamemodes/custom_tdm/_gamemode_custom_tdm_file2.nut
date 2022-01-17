@@ -106,7 +106,7 @@ array<vector> function GetNewFFADropShipLocations(string locationname, string ma
                 dropshiplocations.append(< -18112,-19456,-4224 > )
                 break;
         }
-    } else if(mapname == "mp_rr_canyonlands_mu1")
+    } else if(mapname == "mp_rr_canyonlands_mu1" || mapname == "mp_rr_canyonlands_mu1_night")
     {
         switch (locationname)
         {
@@ -165,7 +165,7 @@ array<vector> function GetNewFFADropShipLocations(string locationname, string ma
 				break;
 				
 		}
-	} else if(mapname == "mp_rr_canyonlands_64k_x_64k" || mapname == "mp_rr_canyonlands_mu1_night")
+	} else if(mapname == "mp_rr_canyonlands_64k_x_64k" )
     {
         switch (locationname)
         {
