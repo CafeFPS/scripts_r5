@@ -2316,6 +2316,7 @@ void function VotingPhase()
     DestroyPlayerProps();
     SetGameState(eGameState.MapVoting)
 	file.FallTriggersEnabled = true
+	
 	if(GetMapName() == "mp_rr_desertlands_64k_x_64k" || GetMapName() == "mp_rr_desertlands_64k_x_64k_nx" || GetMapName() == "mp_rr_canyonlands_mu1" || GetMapName() == "mp_rr_canyonlands_mu1_night" || GetMapName() == "mp_rr_canyonlands_64k_x_64k")
 	{
 		thread CreateShipRoomFallTriggers()
@@ -2352,6 +2353,7 @@ foreach(player in GetPlayerArray())
 			HolsterAndDisableWeapons( player )
         }
 	}catch(e){}
+//CreatePanelText( player, "test", "test", <-19459, 2127, 6404>, <0, 180, 0>, true, 2 )
 }
 
 

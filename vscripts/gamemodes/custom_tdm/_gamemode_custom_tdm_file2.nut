@@ -6,6 +6,23 @@ globalize_all_functions
 #if SERVER
 globalize_all_functions
 #endif
+
+void function CreatePanelText( entity player, string title, string text, vector origin, vector angles, bool showPin, float textScale )
+{
+    string sendPanelText
+    for ( int textType = 0 ; textType < 2 ; textType++ )
+    {
+        sendPanelText = textType == 0 ? title : text
+
+        for ( int i = 0; i < sendPanelText.len(); i++ )
+        {
+            Remote_CallFunction_NonReplay( player, "Dev_BuildTextInfoPanel", textType, sendPanelText[i] )
+        }
+    }
+
+    Remote_CallFunction_NonReplay( player, "Dev_CreateTextInfoPanel", origin.x, origin.y, origin.z, angles.x, angles.y, angles.z, showPin, textScale )
+}
+
 array<vector> function GetNewFFADropShipLocations(string locationname, string mapname)
 {
     array<vector> dropshiplocations
